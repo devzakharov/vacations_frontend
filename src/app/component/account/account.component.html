@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="row">
+    <h1>Настройки аккаунта</h1>
+    <form [formGroup]="form">
+      <fieldset  class="d-flex flex-row flex-wrap align-items-start justify-content-between">
+<!--        <legend style="text-align: left">Данные пользователя</legend>-->
+
+        <mat-form-field appearance="fill">
+          <mat-label>Логин:</mat-label>
+          <input matInput name="username" formControlName="username" [value]="currentUser.username">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Новый пароль:</mat-label>
+          <input matInput name="password" formControlName="password"
+                 type="password" autocomplete="new-password">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Пароль повторно:</mat-label>
+          <input matInput name="password_check" formControlName="password_check"
+                 type="password" autocomplete="new-password">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Имя:</mat-label>
+          <input matInput name="first_name" formControlName="first_name" [value]="currentUser.firstName">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Фамиля:</mat-label>
+          <input matInput name="last_name" formControlName="last_name" [value]="currentUser.lastName">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Отчество:</mat-label>
+          <input matInput name="middle_name" formControlName="middle_name" [value]="currentUser.middleName">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>E-mail:</mat-label>
+          <input matInput name="email" formControlName="email" [value]="currentUser.email">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Организация:</mat-label>
+          <mat-select (selectionChange)="setOrganisationValue($event)" name="organisation" value="{{currentUser.organisationId}}">
+            <mat-option value="1">ONE</mat-option>
+            <mat-option value="2">TWO</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Отдел:</mat-label>
+          <mat-select (selectionChange)="setDepartmentValue($event)" name="department" value="{{currentUser.departmentId}}">
+            <mat-option value="1">ONE</mat-option>
+            <mat-option value="2">TWO</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Должность:</mat-label>
+          <input matInput name="position" formControlName="position" [value]="currentUser.position">
+        </mat-form-field>
+
+      </fieldset>
+      <button mat-flat-button color="primary" class="button button-primary"
+              (click)="saveUser()">Сохранить</button>
+    </form>
+  </div>
+</div>

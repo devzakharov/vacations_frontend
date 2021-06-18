@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+  font-family: Roboto;
+}
+.vacation-item button > span {
+  padding: 0 !important;
+  display: block !important;
+  line-height: 30px !important;
+}

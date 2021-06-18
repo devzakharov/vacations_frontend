@@ -1,0 +1,20 @@
+
+  <div class="d-flex justify-content-center align-items-center" style="height: 100%; width: 100%">
+    <form [formGroup]="form">
+      <fieldset  class="d-flex flex-column align-items-center">
+        <legend style="text-align: center">Войти в систему</legend>
+        <mat-form-field appearance="fill">
+          <mat-label>Логин:</mat-label>
+          <input matInput name="username" formControlName="username">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Пароль:</mat-label>
+          <input matInput name="password" formControlName="password"
+                 type="password">
+        </mat-form-field>
+        <button mat-flat-button color="primary" class="button button-primary"
+                (click)="login()">Войти</button>
+      </fieldset>
+    </form>
+  </div>
+

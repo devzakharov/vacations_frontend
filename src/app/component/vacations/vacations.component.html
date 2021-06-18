@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="row">
+    <h2>Мои отпуска</h2>
+  </div>
+  <div class="row">
+    <h2>Условия</h2>
+    <div class="vacations-checks" [ngClass]="[this.conditionService.conditionsFlag ? 'pass' : 'denied']">
+<!--      <p *ngIf="this.conditions.distributedDays != 28">Распределено дней: {{this.conditions.distributedDays}} из 28</p>-->
+      <p>Распределено дней: {{this.conditionService.distributedDays}} из 28</p>
+      <p>Крайняя дата заполнения: {{this.conditionService.deadline}}</p>
+      <p *ngIf="!this.conditionService.twoWeeksInRow">Один из отпусков по длительности не менее 14 дней!</p>
+    </div>
+  </div>
+  <div class="row">
+    <h2 class="period-header">{{this.vacationPeriods[0]}}</h2>
+    <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[0])" class="col-auto vacation-item">
+      <button mat-mini-fab color="warn">
+        <mat-icon (click)="removeVacation(vacation)">cancel</mat-icon>
+      </button>
+        <mat-form-field appearance="fill">
+          <mat-label>{{vacation.message}} {{vacation.vacation_type}}</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate [value]="vacation.date_from">
+            <input matEndDate [value]="vacation.date_to">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+    </div>
+    <div class="col-auto">
+      <button mat-fab color="primary" aria-label="Добавить отпуск" (click)="openDialog(this.vacationPeriods[0])">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <h2 class="period-header">{{this.vacationPeriods[1]}}</h2>
+    <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[1])" class="col-auto vacation-item">
+      <button mat-mini-fab color="warn">
+        <mat-icon (click)="removeVacation(vacation)">cancel</mat-icon>
+      </button>
+      <mat-form-field appearance="fill">
+        <mat-label>{{vacation.message}} {{vacation.vacation_type}}</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate [value]="vacation.date_from">
+          <input matEndDate [value]="vacation.date_to">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+    <div class="col-auto">
+      <button mat-fab color="primary" aria-label="Добавить отпуск" (click)="openDialog(this.vacationPeriods[1])">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="row" *ngIf="this.vacationService.uncommonVacations.length > 0">
+    <h2>Другие отсутствия</h2>
+  </div>
+  <div class="row" *ngIf="this.vacationService.uncommonVacations.length > 0">
+    <div *ngFor="let vacation of this.vacationService.uncommonVacations" class="col-auto vacation-item">
+      <mat-form-field appearance="fill">
+        <mat-label>{{vacation.message}} {{vacation.vacation_type}}</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input readonly disabled matStartDate [value]="vacation.date_from">
+          <input readonly disabled matEndDate [value]="vacation.date_to">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <button mat-fab color="primary">
+      <mat-icon>check</mat-icon>
+    </button>
+    <button mat-fab color="secondary">
+      <mat-icon>restore</mat-icon>
+    </button>
+  </div>
+</div>

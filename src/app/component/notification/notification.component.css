@@ -1,0 +1,48 @@
+.custom-notifications .mat-list-base .mat-list-item,
+.custom-notifications .mat-list-base .mat-list-option {
+  height: auto;
+  padding: 5px;
+  width: 300px;
+}
+.custom-notifications .mat-list-base .mat-list-item .mat-list-item-content-reverse,
+.custom-notifications .mat-list-base .mat-list-option .mat-list-item-content-reverse {
+  padding: 0 !important;
+}
+.custom-notifications .mat-list-text {
+  padding: 0 !important;
+}
+.custom-notifications .mat-list-base .mat-list-item .mat-list-item-content-reverse,
+.custom-notifications .mat-list-base .mat-list-option .mat-list-item-content-reverse {
+  padding: 0 !important;
+}
+.custom-notifications .mat-list-base .mat-list-item .mat-list-item-content-reverse,
+.custom-notifications .mat-list-base .mat-list-option .mat-list-item-content-reverse {
+  padding: 0 !important;
+}
+
+.custom-notifications-list {
+  display: block;
+  background: #fff;
+  border-radius: 5px;
+  padding-bottom: 8px;
+  position: absolute;
+  top: 64px;
+  left: 26px;
+  -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  z-index: 1;
+}
+.notification-header {
+  font-weight: 600 !important;
+  margin-bottom: 5px !important;
+}
+.custom-notifications {
+  position: relative;
+}
+.custom-notifications-list-close {
+  position: absolute;
+  right: -19px;
+  top: -19px;
+  z-index: 2;
+}

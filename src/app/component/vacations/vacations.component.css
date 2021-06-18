@@ -1,0 +1,36 @@
+.denied {
+  background: #ff8787;
+  border-color: #ff3838;
+}
+.pass {
+  background: #93ff87;
+  border-color: #63ff38;
+}
+.vacations-checks {
+  padding: 10px;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  margin-bottom: 16px;
+}
+.vacations-checks p {
+  margin: 0;
+  font-weight: 500;
+}
+.period-header {
+  text-transform: capitalize;
+}
+.vacation-item {
+  position: relative;
+}
+.vacation-item button {
+  position: absolute;
+  right: -4px;
+  top: -16px;
+  z-index: 1;
+  width: 30px;
+  height: 30px;
+}
+.vacation-item button > span {
+  padding: 0 !important;
+}

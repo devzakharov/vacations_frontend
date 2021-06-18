@@ -1,0 +1,16 @@
+<div class="custom-notifications">
+  <button color="primary" (click)="listVisibility === false ? listVisibility = true : listVisibility = false" mat-fab aria-label="Пользовательские оповещения">
+    <mat-icon matBadge="{{notificationsArray.length}}" matBadgeColor="warn">mail_outline</mat-icon>
+  </button>
+    <div class="custom-notifications-list" *ngIf="listVisibility">
+      <button (click)="listVisibility = false" mat-mini-fab color="warn" aria-label="Закрыть" class="custom-notifications-list-close">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-selection-list #notifications [multiple]="false">
+        <mat-list-option *ngFor="let notification of notificationsArray" [value]="notification" (click)="deleteNotification(notification)">
+          <p class="notification-header">{{notification.header}}</p>
+          <p class="notification-message">{{notification.message}}</p>
+        </mat-list-option>
+      </mat-selection-list>
+  </div>
+</div>

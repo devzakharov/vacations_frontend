@@ -1,0 +1,28 @@
+<div mat-dialog-content >
+<!--  <ul>-->
+<!--    <li *ngFor="let month of data.months">{{month}}</li>-->
+<!--  </ul>-->
+  <form [formGroup]="addVacationForm">
+    <fieldset>
+      <legend style="text-align: center">Добавить отпуск:</legend>
+      <mat-form-field appearance="fill">
+        <mat-label>Выберите даты</mat-label>
+        <!--  [matDatepickerFilter]="monthFilter"-->
+        <mat-date-range-input [rangePicker]="picker" [dateFilter]="monthFilter">
+          <input matStartDate formControlName="start" placeholder="Начало отпуска">
+          <input matEndDate formControlName="end" placeholder="Конец отпуска">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker startView="year" [startAt]="startDate"></mat-date-range-picker>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Сообщение:</mat-label>
+        <input matInput name="message" formControlName="message"
+               type="text" placeholder="Стандартный отпуск">
+      </mat-form-field>
+      <button [matDialogClose] mat-flat-button color="primary" class="button button-primary"
+              (click)="saveVacation();">Сохранить</button>
+    </fieldset>
+  </form>
+</div>
+

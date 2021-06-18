@@ -1,0 +1,41 @@
+.header {
+  background-color: #0a589f;
+  padding: 10px 0 10px 0;
+  color: #fff;
+}
+.header-user  p {
+  margin: 0;
+  cursor: pointer;
+}
+.user-position {
+  font-size: 12px;
+  font-style: italic;
+  color: #bababa;
+}
+.header-text {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.header-notifications {
+  display: flex;
+}
+.menu {
+  background-color: #0a589f;
+  border-top: 1px solid rgba(194, 194, 194, 0.43);
+  padding: 12px 0;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 400;
+  color: #fff;
+}
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  text-align: end;
+}
+.menu ul li {
+  display: inline-block;
+  margin-left: 13px;
+  cursor: pointer;
+}
