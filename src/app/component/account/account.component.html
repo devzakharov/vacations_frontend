@@ -45,8 +45,9 @@
         <mat-form-field appearance="fill">
           <mat-label>Организация:</mat-label>
           <mat-select (selectionChange)="setOrganisationValue($event)" name="organisation" value="{{currentUser.organisationId}}">
-            <mat-option value="1">ONE</mat-option>
-            <mat-option value="2">TWO</mat-option>
+            <mat-option *ngFor="let organisation of this.organisationService.organisationsArray" [value]="organisation.id">
+              {{organisation.displayName}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 

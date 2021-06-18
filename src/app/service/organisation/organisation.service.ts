@@ -15,6 +15,16 @@ export class OrganisationService {
   organisationsArray : Organisation[] = [];
 
   getOrganisationArray() {
-    return this.http.get<Organisation[]>( globals.server + '/api/v1/organisations/user-organisation');
+    return this.http.get<Organisation[]>( globals.server + '/api/v1/organisations/all');
+  }
+
+  setOrganisationArray() {
+    this.getOrganisationArray().subscribe(response => {
+      this.organisationsArray = response;
+      console.log(response);
+      console.log(this.organisationsArray);
+    }, error => {
+      console.log(error);
+    });
   }
 }

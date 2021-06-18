@@ -5,6 +5,7 @@ import {UserService} from "../../service/user/user.service";
 import {User} from "../../model/User";
 import {NotifierService} from "angular-notifier";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {OrganisationService} from "../../service/organisation/organisation.service";
 
 @Component({
   selector: 'app-account',
@@ -21,7 +22,8 @@ export class AccountComponent implements OnInit {
     private router : Router,
     private userService : UserService,
     private notifierService : NotifierService,
-    private fb : FormBuilder
+    private fb : FormBuilder,
+    public organisationService : OrganisationService
   ) {
       this.form = this.fb.group({
         username: [{value: '', disabled: true}],
@@ -43,6 +45,8 @@ export class AccountComponent implements OnInit {
     }
 
     this.getUser();
+    this.organisationService.setOrganisationArray();
+    console.log('account component inited');
   }
 
   getUser() {
