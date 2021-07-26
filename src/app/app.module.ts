@@ -27,12 +27,18 @@ import {MatListModule} from "@angular/material/list";
 import {MatSelectModule} from '@angular/material/select';
 import {VacationsFilter} from "./pipe/VacationsFilter";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import { DepartmentComponent } from './component/department/department.component';
+import { OrganisationComponent } from './component/organisation/organisation.component';
+import { AllOrganisationsComponent } from './component/all-organisations/all-organisations.component';
 
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'vacations', component: VacationsComponent },
   { path: 'my-account', component: AccountComponent },
+  { path: 'department', component: DepartmentComponent},
+  { path: 'organisation', component: OrganisationComponent},
+  { path: 'all-organisations', component: AllOrganisationsComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full'},
 ]
 
@@ -45,7 +51,10 @@ const appRoutes: Routes = [
     AccountComponent,
     NotificationComponent,
     VacationsFilter,
-    AddVacationDialog
+    AddVacationDialog,
+    DepartmentComponent,
+    OrganisationComponent,
+    AllOrganisationsComponent,
   ],
   imports: [
     MatNativeDateModule,

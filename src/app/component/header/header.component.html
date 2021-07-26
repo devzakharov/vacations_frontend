@@ -1,4 +1,4 @@
-<div class="header" *ngIf="displayElement">
+<div class="header" *ngIf="headerService.displayHeader">
   <div class="container">
     <div class="row align-items-center justify-content-between">
       <div class="col-auto">
@@ -16,9 +16,9 @@
       </div>
       <div class="col-auto">
         <div class="header-user" (click)="toAccount()">
-          <p class="user-name">{{currentUser.lastName + " " + currentUser.firstName}}</p>
-          <p class="user-name">{{currentUser.middleName}}</p>
-          <p class="user-position">{{currentUser.position}}</p>
+          <p class="user-name">{{this.headerService.currentUser.lastName + " " + this.headerService.currentUser.firstName}}</p>
+          <p class="user-name">{{this.headerService.currentUser.middleName}}</p>
+          <p class="user-position">{{this.headerService.currentUser.position}}</p>
         </div>
       </div>
       <div class="col-auto">
@@ -27,11 +27,26 @@
     </div>
   </div>
 </div>
-<div class="menu" *ngIf="displayElement">
+<div class="menu" *ngIf="headerService.displayHeader">
   <div class="container">
     <div class="row align-items-center justify-content-end">
       <ul class="col-auto">
-        <li (click)="toVacations()">Отпуска</li>
+
+        <li (click)="toAllOrganisations()" *ngIf="this.headerService.isAdmin() ||
+        this.headerService.isGeneralManager()">Организации</li>
+
+        <li (click)="toOrganisation()" *ngIf="
+        this.headerService.isAdmin() ||
+        this.headerService.isPersonnelOfficer() ||
+        this.headerService.isAccountant() ||
+        this.headerService.isGeneralDirector()">Организация</li>
+
+        <li (click)="toDepartment()" *ngIf="
+        this.headerService.isAdmin() ||
+        this.headerService.isDepartmentHead()">Отдел</li>
+
+        <li (click)="toVacations()">Мой отпуск</li>
+
         <li (click)="toAccount()">Настройки аккаунта</li>
       </ul>
     </div>

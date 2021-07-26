@@ -4,8 +4,10 @@ import {Router} from "@angular/router";
 import {UserService} from "../../service/user/user.service";
 import {User} from "../../model/User";
 import {NotifierService} from "angular-notifier";
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {OrganisationService} from "../../service/organisation/organisation.service";
+import {DepartmentService} from "../../service/department/department.service";
+import {AccountService} from "../../service/account/account.service";
 
 @Component({
   selector: 'app-account',
@@ -14,8 +16,9 @@ import {OrganisationService} from "../../service/organisation/organisation.servi
 })
 export class AccountComponent implements OnInit {
 
-  currentUser : User = new User("", "", "", "", "", "", 0, 0, "", "", []);
+  currentUser : User = new User(0,"", "", "", "", "", "", 0, 0, "", "", [], "");
   form: FormGroup;
+  disableSelect = new FormControl(true);
 
   constructor(
     private authService : AuthService,
@@ -23,7 +26,9 @@ export class AccountComponent implements OnInit {
     private userService : UserService,
     private notifierService : NotifierService,
     private fb : FormBuilder,
-    public organisationService : OrganisationService
+    public organisationService : OrganisationService,
+    public departmentService : DepartmentService,
+    private accountService : AccountService
   ) {
       this.form = this.fb.group({
         username: [{value: '', disabled: true}],
@@ -33,8 +38,8 @@ export class AccountComponent implements OnInit {
         last_name: [{value: '', disabled: true}],
         middle_name: [{value: '', disabled: true}],
         email: [{value: '', disabled: false},Validators.email],
-        organisation: [{value: '', disabled: true}],
-        department: [{value: '', disabled: true}],
+        // organisation: this.fb.control([{value: '', disabled: true}]),
+        // department: this.fb.control([{value: '', disabled: true}]),
         position: [{value: '', disabled: true}],
       });
   }
@@ -46,7 +51,7 @@ export class AccountComponent implements OnInit {
 
     this.getUser();
     this.organisationService.setOrganisationArray();
-    console.log('account component inited');
+    this.departmentService.setDepartmentArray();
   }
 
   getUser() {
@@ -65,10 +70,47 @@ export class AccountComponent implements OnInit {
   }
 
   saveUser() {
-    //this.comparePasswords();
-    //this.emailValidation();
+    if (this.comparePasswords() && this.emailValidation()) {
+      console.log("permission to save user");
+      this.fillUserObjectFromFormFields();
+      this.accountService.saveUser(this.currentUser);
+    }
     console.log(this.form);
     console.log(this.currentUser);
+  }
+
+  fillUserObjectFromFormFields() {
+
+    if (this.form.value.password != "") {
+      this.currentUser.password = this.form.value.password;
+    }
+
+    // if (this.form.value.username != "") {
+    //   this.currentUser.username = this.form.value.username;
+    // }
+
+    if (this.form.value.first_name != "") {
+      this.currentUser.firstName = this.form.value.first_name;
+    }
+
+    if (this.form.value.last_name != "") {
+      this.currentUser.lastName = this.form.value.last_name;
+    }
+
+    if (this.form.value.middle_name != "") {
+      this.currentUser.middleName = this.form.value.middle_name;
+    }
+
+    if (this.form.value.position != "") {
+      this.currentUser.position = this.form.value.position;
+    }
+
+    if (this.form.value.email != "") {
+      this.currentUser.email = this.form.value.email;
+    }
+
+    console.log(this.currentUser);
+
   }
 
   comparePasswords() {
@@ -98,27 +140,32 @@ export class AccountComponent implements OnInit {
 
   changeFormAccessibility() {
     this.form = this.fb.group({
-      username: [{value: '', disabled: false}],
+      username: [{value: '', disabled: true}],
       password: [''],
       password_check: [''],
       first_name: [{value: '', disabled: false}],
       last_name: [{value: '', disabled: false}],
       middle_name: [{value: '', disabled: false}],
       email: [{value: '', disabled: false},Validators.email],
-      organisation: [{value: '', disabled: false}],
-      department: [{value: '', disabled: false}],
+      // organisation: this.fb.control([{value: '', disabled: false}]),
+      // department: this.fb.control([{value: '', disabled: false}]),
       position: [{value: '', disabled: false}],
     });
+
+    this.disableSelect = new FormControl(false);
   }
 
   setOrganisationValue(e : any) {
-    console.log(e.value);
+    // console.log(e.value);
     this.form.value.organisation = e.value;
+    this.departmentService.getDepartmentsArrayByOrganisationId(e.value);
+    this.currentUser.organisationId = e.value;
   }
 
   setDepartmentValue(e : any) {
-    console.log(e.value);
+    // console.log(e.value);
     this.form.value.department = e.value;
+    this.currentUser.departmentId = e.value;
   }
 
   //если значение в форме пустое, берем значение из текущего пользователя, если значение новое - пишем новое в юзера для апдейта на беке

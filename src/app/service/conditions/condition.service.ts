@@ -22,7 +22,10 @@ export class ConditionService {
   }
 
   checkConditions() : boolean {
-    return (this.distributedDays === 28) && this.twoWeeksInRow && (moment().diff(moment(this.deadline)) > 0);
+    // console.log(moment())
+    // console.log(moment(this.deadline, 'DD.MM.YYYY'));
+    // console.log(moment().diff(moment(this.deadline, 'DD.MM.YYYY'), 'days'));
+    return (this.distributedDays === 28) && this.twoWeeksInRow && (moment().diff(moment(this.deadline, 'DD.MM.YYYY'), 'days') < 0);
   }
 
   refreshDistributedDays () {
@@ -41,6 +44,7 @@ export class ConditionService {
   twoWeeksVacationCheck() {
     this.vacationService.getMaxDaysInARow().subscribe(
       response => {
+        // console.log(response);
         if (response === 14) {
           this.twoWeeksInRow = true;
         }

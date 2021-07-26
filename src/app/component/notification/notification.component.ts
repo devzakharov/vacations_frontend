@@ -4,6 +4,7 @@ import {UserNotification} from "../../model/UserNotification";
 import {NotifierService} from "angular-notifier";
 import {Router} from "@angular/router";
 import {AuthService} from "../../service/auth/auth.service";
+import {HeaderService} from "../../service/header/header.service";
 
 @Component({
   selector: 'app-notification',
@@ -22,7 +23,8 @@ export class NotificationComponent implements OnInit {
     private notificationService: NotificationService,
     private router: Router,
     private notifierService: NotifierService,
-    private authService: AuthService
+    private authService: AuthService,
+    private headerService: HeaderService
   ) { }
 
   ngOnInit(): void {
@@ -50,6 +52,7 @@ export class NotificationComponent implements OnInit {
         this.stopFlag = true;
         this.notifierService.notify('error', 'Время действия сессии истекло, войдите заново!');
         this.authService.logout();
+        this.headerService.displayHeader = false;
         this.router.navigateByUrl('/login');
       }
       console.log(error);

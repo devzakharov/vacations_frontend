@@ -10,6 +10,8 @@ import 'moment/locale/ru'
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ConditionService} from "../../service/conditions/condition.service";
+import {HeaderService} from "../../service/header/header.service";
+import {UserService} from "../../service/user/user.service";
 
 @Component({
   selector: 'app-vacations',
@@ -23,7 +25,9 @@ export class VacationsComponent implements OnInit {
               public vacationService : VacationService,
               private notifier : NotifierService,
               public dialog : MatDialog,
-              public conditionService : ConditionService
+              public conditionService : ConditionService,
+              private headerService : HeaderService,
+              private userService : UserService
   ) { }
 
   vacationPeriods: string[] = [];
@@ -72,6 +76,16 @@ export class VacationsComponent implements OnInit {
           }
         }
       );
+
+      this.userService.getUser().subscribe(response => {
+        if (response.vacationsApproval == 'APPROVED') {
+          this.blockUserChanges();
+        } else if (response.vacationsApproval == 'NOT_APPROVED') {
+          this.unblockUserChanges();
+        }
+      }, error => {
+        console.log(error);
+      });
 
       this.getDeadline();
       this.conditionService.refreshDistributedDays();
@@ -146,6 +160,58 @@ export class VacationsComponent implements OnInit {
       }
     );
     return momentArr;
+  }
+
+  userConfirmVacations() {
+    // проверка всех условия заполненности
+    if (this.conditionService.checkConditions()) {
+      this.vacationService.userConfirmVacations().subscribe(
+        response => {
+          // console.log(response);
+          this.headerService.currentUser.vacationsApproval = response.vacationsApproval;
+          this.blockUserChanges();
+          this.notifier.notify('success', 'График отпусков отправлен на утверждение руководителю отдела.')
+        },
+        error => {
+          console.log(error);
+          this.notifier.notify('error', error.error.message);
+        });
+    } else {
+      this.notifier.notify('error', 'Не выполнены условия заполнения отпусков!');
+    }
+  }
+
+  userConfirmationRollBack() {
+    this.vacationService.userConfirmationRollBack().subscribe(
+      response => {
+        console.log(response);
+        this.headerService.currentUser.vacationsApproval = response.vacationsApproval;
+        this.unblockUserChanges();
+      }, error => {
+        console.log(error)
+      }
+    )
+  }
+
+  blockUserChanges () {
+    this.vacationService.blockChanges = true;
+  }
+
+  unblockUserChanges () {
+    if (moment().diff(moment(this.conditionService.deadline, 'DD.MM.YYYY'), 'days') < 0) {
+      this.vacationService.blockChanges = false;
+    } else {
+      this.notifier.notify('warning', 'Вы просрочили крайнюю дату заполнения графика, обратитесь к руководителю отдела!');
+    }
+  }
+
+  showWarningOnClick () {
+    if (this.headerService.currentUser.vacationsApproval === 'APPROVED') {
+      this.notifier.notify('warning', 'Вы отправили свой график на утверждение руководителю и не можете вносить в него изменения!');
+    }
+    if (this.headerService.currentUser.vacationsApproval === 'NOT_APPROVED') {
+      this.notifier.notify('warning', 'Вы просрочили крайнюю дату заполнения графика, обратитесь к руководителю отдела!');
+    }
   }
 }
 

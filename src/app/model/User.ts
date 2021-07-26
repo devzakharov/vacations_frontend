@@ -1,6 +1,7 @@
 import {Role} from "../type/Role";
 
 export class User {
+  id : number;
   username : string;
   firstName : string;
   middleName : string;
@@ -12,8 +13,10 @@ export class User {
   status : string;
   vacationsApproval : string;
   roles : Role[];
+  password : string;
 
   constructor(
+    id : number,
     username: string,
     firstName: string,
     middleName: string,
@@ -24,8 +27,10 @@ export class User {
     organisationId: number,
     status: string,
     vacationsApproval: string,
-    roles: Role[]
+    roles: Role[],
+    password : string
   ) {
+    this.id = id;
     this.username = username;
     this.firstName = firstName;
     this.middleName = middleName;
@@ -37,5 +42,6 @@ export class User {
     this.status = status;
     this.vacationsApproval = vacationsApproval;
     this.roles = roles;
+    this.password = password;
   }
 }

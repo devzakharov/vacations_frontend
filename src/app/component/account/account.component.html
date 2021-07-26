@@ -44,7 +44,7 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Организация:</mat-label>
-          <mat-select (selectionChange)="setOrganisationValue($event)" name="organisation" value="{{currentUser.organisationId}}">
+          <mat-select (selectionChange)="setOrganisationValue($event)" [disabled]="disableSelect.value" name="organisation" [value]="currentUser.organisationId">
             <mat-option *ngFor="let organisation of this.organisationService.organisationsArray" [value]="organisation.id">
               {{organisation.displayName}}
             </mat-option>
@@ -53,9 +53,10 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Отдел:</mat-label>
-          <mat-select (selectionChange)="setDepartmentValue($event)" name="department" value="{{currentUser.departmentId}}">
-            <mat-option value="1">ONE</mat-option>
-            <mat-option value="2">TWO</mat-option>
+          <mat-select (selectionChange)="setDepartmentValue($event)" [disabled]="disableSelect.value" name="department" [value]="currentUser.departmentId">
+            <mat-option *ngFor="let department of this.departmentService.departmentsArray" [value]="department.id">
+              {{department.displayName}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 

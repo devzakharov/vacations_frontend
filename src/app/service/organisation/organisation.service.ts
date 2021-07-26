@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import * as globals from "../../globals";
 import {Organisation} from "../../model/Organisation";
+import {DepartmentService} from "../department/department.service";
 
 
 @Injectable({
@@ -9,7 +10,8 @@ import {Organisation} from "../../model/Organisation";
 })
 export class OrganisationService {
 
-  constructor(private http : HttpClient) {
+  constructor(private http : HttpClient,
+              private departmentService : DepartmentService) {
   }
 
   organisationsArray : Organisation[] = [];
@@ -22,7 +24,6 @@ export class OrganisationService {
     this.getOrganisationArray().subscribe(response => {
       this.organisationsArray = response;
       console.log(response);
-      console.log(this.organisationsArray);
     }, error => {
       console.log(error);
     });

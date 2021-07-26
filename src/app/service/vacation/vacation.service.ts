@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import * as globals from "../../globals";
 import { Moment } from 'moment';
+import {User} from "../../model/User";
 
 
 
@@ -14,6 +15,8 @@ export class VacationService {
 
   public commonVacations : Vacation[] = [];
   public uncommonVacations : Vacation[] = [];
+
+  blockChanges = false;
 
   constructor(private http : HttpClient) { }
 
@@ -59,5 +62,13 @@ export class VacationService {
 
   saveVacation(body : Vacation) {
     return this.http.post<Vacation>(globals.server + '/api/v1/vacations/add', body);
+  }
+
+  userConfirmVacations() {
+    return this.http.put<User>(globals.server + '/api/v1/vacations/approve', {'vacation_approval' : 'APPROVED'});
+  }
+
+  userConfirmationRollBack() {
+    return this.http.put<User>(globals.server + '/api/v1/vacations/rollback', {'vacation_approval' : 'NOT_APPROVED'});
   }
 }
