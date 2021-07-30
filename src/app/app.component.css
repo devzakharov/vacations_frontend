@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+
 * {
   font-family: Roboto;
 }
@@ -7,4 +8,34 @@
   padding: 0 !important;
   display: block !important;
   line-height: 30px !important;
+}
+h1 {
+  margin-top: 16px !important;
+}
+.white-icon {
+  color: white;
+}
+.white-icon svg {
+  fill: white;
+}
+.green-icon {
+  color: #2da00b;
+}
+.green-icon svg {
+  fill: #2da00b;
+}
+.red-icon {
+  color: #ef0000;
+}
+.red-icon svg {
+  fill: #ef0000;
+}
+.gray-icon {
+  color: #9c9c9c;
+}
+.gray-icon svg {
+  fill: #9c9c9c;
+}
+.custom-primary-color {
+  background-color: #0a589f !important;
 }

@@ -1,7 +1,7 @@
 <div class="container vacations-container">
   <div class="vacations-blocker" (click)="this.showWarningOnClick()" *ngIf="this.vacationService.blockChanges"></div>
   <div class="row">
-    <h2>Мои отпуска</h2>
+    <h1>Мой отпуск</h1>
   </div>
   <div class="row">
     <h2>Условия</h2>
@@ -10,18 +10,15 @@
       <p>Распределено дней: {{this.conditionService.distributedDays}} из 28</p>
       <p>Крайняя дата заполнения: {{this.conditionService.deadline}}</p>
       <p *ngIf="!this.conditionService.twoWeeksInRow">Один из отпусков по длительности не менее 14 дней!</p>
-      <p *ngIf="this.conditionService.conditionsFlag">Вы можете отправить свои отпуска на утверждение руководителю отдела
-        <button title="Отправить на утверждение руководителю" mat-mini-fab color="primary" (click)="this.userConfirmVacations()">
-          <mat-icon>check</mat-icon>
-        </button>
+      <p *ngIf="this.conditionService.conditionsFlag">Вы можете отправить свои отпуска на утверждение руководителю отдела!
       </p>
     </div>
   </div>
   <div class="row">
     <h2 class="period-header">{{this.vacationPeriods[0]}}</h2>
     <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[0])" class="col-auto vacation-item">
-      <button mat-mini-fab color="warn" title="Удалить отпуск">
-        <mat-icon (click)="removeVacation(vacation)">cancel</mat-icon>
+      <button mat-mini-fab color="disabled" title="Удалить отпуск">
+        <mat-icon (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
       </button>
         <mat-form-field appearance="fill">
           <mat-label>{{vacation.message}} {{vacation.vacation_type}}</mat-label>
@@ -42,8 +39,8 @@
   <div class="row">
     <h2 class="period-header">{{this.vacationPeriods[1]}}</h2>
     <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[1])" class="col-auto vacation-item">
-      <button mat-mini-fab color="warn" title="Удалить отпуск">
-        <mat-icon  (click)="removeVacation(vacation)">cancel</mat-icon>
+      <button mat-mini-fab color="disabled" title="Удалить отпуск">
+        <mat-icon  (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
       </button>
       <mat-form-field appearance="fill">
         <mat-label>{{vacation.message}} {{vacation.vacation_type}}</mat-label>
@@ -80,11 +77,11 @@
 </div>
 <div class="container buttons-container">
   <div class="flex-row d-flex justify-content-center">
-    <button title="Отправить на утверждение руководителю" style="margin-right: 13px" mat-fab color="primary" (click)="this.userConfirmVacations()">
-      <mat-icon>check</mat-icon>
+    <button title="Отправить на утверждение руководителю" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.userConfirmVacations()">
+      <mat-icon>check</mat-icon><span> Отправить руководителю</span>
     </button>
-    <button title="Снять с утверждения" mat-fab color="secondary" (click)="this.userConfirmationRollBack()">
-      <mat-icon>restore</mat-icon>
+    <button title="Снять с утверждения" mat-raised-button color="accent" (click)="this.userConfirmationRollBack()">
+      <mat-icon>restore</mat-icon><span> Внести изменения</span>
     </button>
   </div>
 </div>

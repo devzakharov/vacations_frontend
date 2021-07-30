@@ -12,6 +12,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ConditionService} from "../../service/conditions/condition.service";
 import {HeaderService} from "../../service/header/header.service";
 import {UserService} from "../../service/user/user.service";
+import {NotificationService} from "../../service/notification/notification.service";
+import {UserNotification} from "../../model/UserNotification";
 
 @Component({
   selector: 'app-vacations',
@@ -27,7 +29,8 @@ export class VacationsComponent implements OnInit {
               public dialog : MatDialog,
               public conditionService : ConditionService,
               private headerService : HeaderService,
-              private userService : UserService
+              private userService : UserService,
+              private notificationService : NotificationService
   ) { }
 
   vacationPeriods: string[] = [];
@@ -44,7 +47,7 @@ export class VacationsComponent implements OnInit {
 
       this.vacationService.getAllCommonVacations().subscribe(
         (response) => {
-          this.notifier.notify('success', 'Отпуска загруженны!');
+          // this.notifier.notify('success', 'Отпуска загруженны!');
           this.vacationService.commonVacations = [];
           response.forEach(vacation => {
             this.vacationService.commonVacations.push(vacation);
@@ -62,7 +65,7 @@ export class VacationsComponent implements OnInit {
 
       this.vacationService.getAllUncommonVacations().subscribe(
         (response) => {
-          this.notifier.notify('success', 'Отсутствия загруженны!');
+          // this.notifier.notify('success', 'Отсутствия загруженны!');
           this.vacationService.uncommonVacations = [];
           response.forEach(vacation => {
             this.vacationService.uncommonVacations.push(vacation);
@@ -95,7 +98,7 @@ export class VacationsComponent implements OnInit {
   removeVacation(vacation : Vacation) {
     this.vacationService.removeVacation(vacation).subscribe((response) => {
       console.log(response);
-      this.notifier.notify('success', 'Отсутствие ' + vacation.id + ' удалено!');
+      this.notifier.notify('success', 'Отпуск ' + vacation.date_from + ' - ' + vacation.date_to + ' удален!');
       this.vacationService.commonVacations = [];
       this.vacationService.uncommonVacations = [];
       this.ngOnInit();
@@ -171,6 +174,18 @@ export class VacationsComponent implements OnInit {
           this.headerService.currentUser.vacationsApproval = response.vacationsApproval;
           this.blockUserChanges();
           this.notifier.notify('success', 'График отпусков отправлен на утверждение руководителю отдела.')
+
+          let notification = new UserNotification(
+            0,
+            'Пользователь внес отпуска',
+            this.notificationService.userSentVacationsForApprove()
+          );
+
+          this.notificationService.sendNotification(notification).subscribe(response => {
+            console.log(response);
+          }, error => {
+            console.log(error);
+          });
         },
         error => {
           console.log(error);

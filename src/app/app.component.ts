@@ -9,6 +9,7 @@ import {AuthService} from "./service/auth/auth.service";
     '../../node_modules/angular-notifier/styles.css'],
   encapsulation: ViewEncapsulation.None,
 })
+
 export class AppComponent {
   constructor(private http: HttpClient,
               public authService: AuthService) {

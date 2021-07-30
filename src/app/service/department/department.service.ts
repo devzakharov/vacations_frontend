@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Organisation} from "../../model/Organisation";
 import * as globals from "../../globals";
 import {Department} from "../../model/Department";
-import {HeaderService} from "../header/header.service";
-import {OrganisationService} from "../organisation/organisation.service";
+import {User} from "../../model/User";
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +36,9 @@ export class DepartmentService {
         console.log(error);
       }
     );
+  }
+
+  getUserListByDepartmentId(id : number) {
+    return this.http.get<User[]>(globals.server + '/api/v1/users/users-by-department-id?department=' + id);
   }
 }

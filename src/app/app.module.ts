@@ -30,6 +30,7 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import { DepartmentComponent } from './component/department/department.component';
 import { OrganisationComponent } from './component/organisation/organisation.component';
 import { AllOrganisationsComponent } from './component/all-organisations/all-organisations.component';
+import {MatTable, MatTableModule} from "@angular/material/table";
 
 
 const appRoutes: Routes = [
@@ -75,7 +76,8 @@ const appRoutes: Routes = [
     MatBadgeModule,
     MatListModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTableModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'ru'},
