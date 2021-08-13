@@ -71,4 +71,8 @@ export class VacationService {
   userConfirmationRollBack() {
     return this.http.put<User>(globals.server + '/api/v1/vacations/rollback', {'vacation_approval' : 'NOT_APPROVED'});
   }
+
+  approveUserVacations(user: any) {
+    return this.http.post<User>(globals.server + '/api/v1/vacations/department-head-approval', user);
+  }
 }

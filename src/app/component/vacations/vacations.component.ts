@@ -48,6 +48,7 @@ export class VacationsComponent implements OnInit {
       this.vacationService.getAllCommonVacations().subscribe(
         (response) => {
           // this.notifier.notify('success', 'Отпуска загруженны!');
+          console.log(response);
           this.vacationService.commonVacations = [];
           response.forEach(vacation => {
             this.vacationService.commonVacations.push(vacation);
@@ -166,46 +167,73 @@ export class VacationsComponent implements OnInit {
   }
 
   userConfirmVacations() {
-    // проверка всех условия заполненности
-    if (this.conditionService.checkConditions()) {
-      this.vacationService.userConfirmVacations().subscribe(
-        response => {
-          // console.log(response);
-          this.headerService.currentUser.vacationsApproval = response.vacationsApproval;
-          this.blockUserChanges();
-          this.notifier.notify('success', 'График отпусков отправлен на утверждение руководителю отдела.')
 
-          let notification = new UserNotification(
-            0,
-            'Пользователь внес отпуска',
-            this.notificationService.userSentVacationsForApprove()
-          );
+    this.vacationService.getAllCommonVacations().subscribe(response => {
+      if (response.some(vacation => {
+          return vacation.department_head_approval === 'APPROVED';
+        }
+      )) {
+        this.notifier.notify('error', 'Вы уже отправили свой график на утверждение!')
+      } else {
+        if (this.conditionService.checkConditions()) {
+          this.vacationService.userConfirmVacations().subscribe(
+            response => {
+              this.headerService.currentUser.vacationsApproval = response.vacationsApproval;
+              this.blockUserChanges();
+              this.notifier.notify('success', 'График отпусков отправлен на утверждение руководителю отдела.')
 
-          this.notificationService.sendNotification(notification).subscribe(response => {
-            console.log(response);
-          }, error => {
-            console.log(error);
-          });
-        },
-        error => {
-          console.log(error);
-          this.notifier.notify('error', error.error.message);
-        });
-    } else {
-      this.notifier.notify('error', 'Не выполнены условия заполнения отпусков!');
-    }
+              let notification = new UserNotification(
+                0,
+                'Пользователь внес отпуска',
+                this.notificationService.userSendVacationsForApproveMessage(),
+                this.headerService.currentUser.id,
+                0
+              );
+
+              console.log(notification);
+
+              this.notificationService.sendNotification(notification).subscribe(response => {
+                console.log(response);
+              }, error => {
+                console.log(error);
+              });
+            },
+            error => {
+              // console.log(error);
+              this.notifier.notify('error', error.error.message);
+            });
+        } else {
+          this.notifier.notify('error', 'Не выполнены условия заполнения отпусков!');
+        }
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 
   userConfirmationRollBack() {
-    this.vacationService.userConfirmationRollBack().subscribe(
-      response => {
-        console.log(response);
-        this.headerService.currentUser.vacationsApproval = response.vacationsApproval;
-        this.unblockUserChanges();
-      }, error => {
-        console.log(error)
+    this.vacationService.getAllCommonVacations().subscribe(response => {
+      if (response.some(vacation => {
+        return vacation.department_head_approval === 'APPROVED';
       }
-    )
+        )) {
+        // console.log('APPROVED');
+        this.notifier.notify('error', 'Вы не можете скорректировать график! Начальник отдела уже утвердил Ваш график отпусков.')
+      } else {
+        // console.log('NOT_APPROVED');
+        this.vacationService.userConfirmationRollBack().subscribe(
+          response => {
+            // console.log(response);
+            this.headerService.currentUser.vacationsApproval = response.vacationsApproval;
+            this.unblockUserChanges();
+          }, error => {
+            console.log(error)
+          }
+        )
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 
   blockUserChanges () {
@@ -253,7 +281,7 @@ export class AddVacationDialog {
 
   startDate = new Date();
   addVacationForm: FormGroup;
-  vacationForSave : Vacation = new Vacation(0, '', '', '', 'COMMON', 0);
+  vacationForSave : Vacation = new Vacation(0, '', '', '', 'COMMON', 0, '');
 
   monthFilter = (m: Date | null): boolean => {
     const month = (m || new Date()).getMonth();

@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import * as globals from "../../globals";
 import {Department} from "../../model/Department";
 import {User} from "../../model/User";
+import {Vacation} from "../../model/Vacation";
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +41,9 @@ export class DepartmentService {
 
   getUserListByDepartmentId(id : number) {
     return this.http.get<User[]>(globals.server + '/api/v1/users/users-by-department-id?department=' + id);
+  }
+
+  approveUserVacations(vacationArray : Vacation[]) {
+    return this.http.post(globals.server + '/api/v1/vacations/approve-vacations', vacationArray);
   }
 }

@@ -3,6 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import * as globals from "../../globals";
 import {Organisation} from "../../model/Organisation";
 import {DepartmentService} from "../department/department.service";
+import {Department} from "../../model/Department";
+import {HRDepartment} from "../../model/HRDepartment";
 
 
 @Injectable({
@@ -28,4 +30,9 @@ export class OrganisationService {
       console.log(error);
     });
   }
+
+  getUsersGroupingByDepartments(organisationId : number) {
+    return this.http.get<HRDepartment[]>(globals.server + '/api/v1/organisations/organisation?id=' + organisationId);
+  }
+
 }

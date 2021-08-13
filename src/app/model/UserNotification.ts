@@ -1,58 +1,18 @@
 export class UserNotification {
 
-  private _id: number;
-  private _header: string;
-  private _message: string;
-  // private _notificationType: string;
-  // private _created: string;
+  id: number;
+  senderId : number;
+  recipientId : number | undefined;
+  header: string;
+  message: string;
 
 
-  constructor(id: number, header: string, message: string) {
-    this._id = id;
-    this._header = header;
-    this._message = message;
-    // this._notificationType = notificationType;
-    // this._created = created;
+  constructor(id: number, header: string, message: string, senderId : number, recipientId?: number) {
+    this.id = id;
+    this.header = header;
+    this.message = message;
+    this.senderId = senderId;
+    this.recipientId = recipientId;
   }
 
-
-  get id(): number {
-    return this._id;
-  }
-
-  set id(value: number) {
-    this._id = value;
-  }
-
-  get header(): string {
-    return this._header;
-  }
-
-  set header(value: string) {
-    this._header = value;
-  }
-
-  get message(): string {
-    return this._message;
-  }
-
-  set message(value: string) {
-    this._message = value;
-  }
-
-  // get notificationType(): string {
-  //   return this._notificationType;
-  // }
-  //
-  // set notificationType(value: string) {
-  //   this._notificationType = value;
-  // }
-
-  // get created(): string {
-  //   return this._created;
-  // }
-  //
-  // set created(value: string) {
-  //   this._created = value;
-  // }
 }

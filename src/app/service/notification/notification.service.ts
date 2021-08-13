@@ -27,9 +27,14 @@ export class NotificationService {
     return this.http.post<UserNotification>(globals.server + '/api/v1/notifications/add', notification);
   }
 
-  userSentVacationsForApprove() {
-    return 'Пользователь' + this.headerService.currentUser.lastName + ' '
+  userSendVacationsForApproveMessage() {
+    return 'Пользователь ' + this.headerService.currentUser.lastName + ' '
       + this.headerService.currentUser.firstName + ' внес график отпусков и ожидает одобрения.'
+  }
+
+  departmentHeadApproveVacationsMessage() {
+    return 'Пользователь ' + this.headerService.currentUser.lastName + ' '
+      + this.headerService.currentUser.firstName + ' утвердил ваш график отпусков.'
   }
 
 }

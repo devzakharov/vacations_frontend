@@ -5,6 +5,10 @@ import {UserService} from "../../service/user/user.service";
 import {HeaderService} from "../../service/header/header.service";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
 import * as moment from 'moment';
+import {VacationService} from "../../service/vacation/vacation.service";
+import {Vacation} from "../../model/Vacation";
+import {UserNotification} from "../../model/UserNotification";
+import {NotificationService} from "../../service/notification/notification.service";
 
 const ELEMENT_DATA: User[] = [];
 
@@ -18,7 +22,9 @@ export class DepartmentComponent implements OnInit {
 
   constructor(private departmentService : DepartmentService,
               private userService : UserService,
-              private headerService : HeaderService) { }
+              private headerService : HeaderService,
+              private vacationService : VacationService,
+              private notificationService : NotificationService) { }
 
   // @ts-ignore
   @ViewChild(MatTable) table: MatTable<User>;
@@ -44,7 +50,6 @@ export class DepartmentComponent implements OnInit {
         response.forEach(user => {
           console.log(user);
           ELEMENT_DATA.push(user);
-
         });
         console.log(this.dataSource);
         this.table.renderRows();
@@ -56,5 +61,46 @@ export class DepartmentComponent implements OnInit {
 
   parseStringToDate(dateString: string) {
     return moment(dateString).format('DD.MM.YYYY');
+  }
+
+  approveUserVacations(user : any) {
+    this.vacationService.approveUserVacations(user).subscribe(response => {
+
+      // @ts-ignore
+      ELEMENT_DATA.find(el => {return el.id === response.id}).vacations = response.vacations;
+
+      //on success will provide notification for user and change buttons state, notify user about success
+
+      let notification = new UserNotification(
+        0,
+        'Глава отдела утвердил график',
+        this.notificationService.departmentHeadApproveVacationsMessage(),
+        this.headerService.currentUser.id,
+        user.id
+      );
+
+      this.notificationService.sendNotification(notification).subscribe(response => {
+        console.log(response);
+      }, error => {
+        console.log(error);
+      });
+
+      console.log(notification);
+      console.log(ELEMENT_DATA);
+    }, error => {
+      console.log(error);
+      //error message
+    });
+  }
+  disapproveUserVacations(user : any) {
+    console.log(user);
+  }
+
+  isUserVacationsApprovedByHead(vacations : Vacation[]) {
+    let found = vacations.some(function (el) {
+      // @ts-ignore
+      return el.departmentHeadApproval === 'NOT_APPROVED';
+    });
+    return !found;
   }
 }

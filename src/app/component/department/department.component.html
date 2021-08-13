@@ -42,8 +42,10 @@
             <mat-icon class="gray-icon">access_time</mat-icon>
           </div>
           <div *ngIf="user.vacationsApproval === 'APPROVED'">
-            <mat-icon class="green-icon">thumb_up_alt</mat-icon>
-            <mat-icon class="red-icon">thumb_down_alt</mat-icon>
+            <mat-icon *ngIf="!isUserVacationsApprovedByHead(user.vacations)" class="green-icon clickable" (click)="this.approveUserVacations(user)" title="Утвердить">thumb_up_alt</mat-icon>
+            <mat-icon *ngIf="isUserVacationsApprovedByHead(user.vacations)" class="green-icon clickable" title="Вы утвердили отпуска сотрудника">thumb_up_alt</mat-icon>
+            <mat-icon *ngIf="!isUserVacationsApprovedByHead(user.vacations)" class="red-icon clickable" (click)="this.disapproveUserVacations(user)" title="Вернуть на доработку">thumb_down_alt</mat-icon>
+            <mat-icon *ngIf="isUserVacationsApprovedByHead(user.vacations)" class="gray-icon clickable" title="Вы утвердили отпуска сотрудника">thumb_down_alt</mat-icon>
           </div>
         </td>
       </ng-container>

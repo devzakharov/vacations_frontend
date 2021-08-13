@@ -1,1 +1,54 @@
-<p>organisation works!</p>
+<div class="container">
+  <div class="row">
+    <h1>Организация</h1>
+  </div>
+  <div class="row">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+
+      <ng-container matColumnDef="demo-name">
+        <th mat-header-cell *matHeaderCellDef> Ф.И.О. </th>
+        <td mat-cell *matCellDef="let user"> {{user.lastName + ' ' + user.firstName + ' ' + user.middleName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="demo-position">
+        <th mat-header-cell *matHeaderCellDef> Должность </th>
+        <td mat-cell *matCellDef="let user"> {{user.position}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="demo-vacations">
+        <th mat-header-cell *matHeaderCellDef class="text-center"> Отпуска </th>
+        <td mat-cell *matCellDef="let user" class="text-center">
+          <span *ngIf="user.vacations === null">Нет данных</span>
+          <div class="vacations-table-list">
+            <span *ngFor="let vacation of user.vacations">{{'c: ' + this.parseStringToDate(vacation.dateFrom) + ' по: ' + this.parseStringToDate(vacation.dateTo)}}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="demo-approvals">
+        <th mat-header-cell *matHeaderCellDef  class="text-center"> Отправил на утверждение </th>
+        <td mat-cell *matCellDef="let user" class="text-center">
+
+          <mat-icon aria-hidden="false" aria-label="" *ngIf="user.vacationsApproval === 'APPROVED'" class="green-icon">check_circle_outline</mat-icon>
+          <mat-icon aria-hidden="false" aria-label="" *ngIf="user.vacationsApproval === 'NOT_APPROVED'" class="red-icon">not_interested</mat-icon>
+
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="demo-approve">
+        <th mat-header-cell *matHeaderCellDef  class="text-center"> Утвердить? </th>
+        <td mat-cell *matCellDef="let user" class="text-center">
+          <div *ngIf="user.vacationsApproval === 'NOT_APPROVED'">
+            <mat-icon class="green-icon">access_time</mat-icon>
+          </div>
+          <div *ngIf="user.vacationsApproval === 'APPROVED'">
+            <mat-icon class="red-icon" >access_time</mat-icon>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

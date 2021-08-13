@@ -8,6 +8,7 @@ import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angul
 import {OrganisationService} from "../../service/organisation/organisation.service";
 import {DepartmentService} from "../../service/department/department.service";
 import {AccountService} from "../../service/account/account.service";
+import {HeaderService} from "../../service/header/header.service";
 
 @Component({
   selector: 'app-account',
@@ -28,7 +29,8 @@ export class AccountComponent implements OnInit {
     private fb : FormBuilder,
     public organisationService : OrganisationService,
     public departmentService : DepartmentService,
-    private accountService : AccountService
+    private accountService : AccountService,
+    private headerService : HeaderService
   ) {
       this.form = this.fb.group({
         username: [{value: '', disabled: true}],
@@ -38,8 +40,6 @@ export class AccountComponent implements OnInit {
         last_name: [{value: '', disabled: true}],
         middle_name: [{value: '', disabled: true}],
         email: [{value: '', disabled: false},Validators.email],
-        // organisation: this.fb.control([{value: '', disabled: true}]),
-        // department: this.fb.control([{value: '', disabled: true}]),
         position: [{value: '', disabled: true}],
       });
   }
@@ -71,9 +71,14 @@ export class AccountComponent implements OnInit {
 
   saveUser() {
     if (this.comparePasswords() && this.emailValidation()) {
-      console.log("permission to save user");
       this.fillUserObjectFromFormFields();
-      this.accountService.saveUser(this.currentUser);
+      this.headerService.getRolesArray(localStorage.getItem('token'));
+      console.log(this.headerService.currentUserRoles);
+      if (this.headerService.currentUserRoles.some(val => val === "ROLE_ADMIN")) {
+        this.accountService.saveUserByAdmin(this.currentUser);
+      } else if (this.headerService.currentUserRoles.some(val => val === "ROLE_USER")) {
+        this.accountService.saveUserBySelf(this.currentUser);
+      }
     }
     console.log(this.form);
     console.log(this.currentUser);
@@ -147,8 +152,6 @@ export class AccountComponent implements OnInit {
       last_name: [{value: '', disabled: false}],
       middle_name: [{value: '', disabled: false}],
       email: [{value: '', disabled: false},Validators.email],
-      // organisation: this.fb.control([{value: '', disabled: false}]),
-      // department: this.fb.control([{value: '', disabled: false}]),
       position: [{value: '', disabled: false}],
     });
 
@@ -156,18 +159,14 @@ export class AccountComponent implements OnInit {
   }
 
   setOrganisationValue(e : any) {
-    // console.log(e.value);
     this.form.value.organisation = e.value;
     this.departmentService.getDepartmentsArrayByOrganisationId(e.value);
     this.currentUser.organisationId = e.value;
   }
 
   setDepartmentValue(e : any) {
-    // console.log(e.value);
     this.form.value.department = e.value;
     this.currentUser.departmentId = e.value;
   }
-
-  //если значение в форме пустое, берем значение из текущего пользователя, если значение новое - пишем новое в юзера для апдейта на беке
 
 }

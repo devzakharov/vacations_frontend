@@ -15,3 +15,6 @@
 .mat-header-cell {
   font-size: 14px !important;
 }
+.clickable {
+  cursor: pointer;
+}

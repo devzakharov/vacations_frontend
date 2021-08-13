@@ -14,8 +14,18 @@ export class AccountService {
   constructor(private http : HttpClient,
               private notifierService : NotifierService) { }
 
-  saveUser(user : User) {
+  saveUserByAdmin(user : User) {
     return this.http.post<User>( globals.server + '/api/v1/admin/users/update', user)
+      .subscribe(response => {
+        this.notifierService.notify('success', 'Данные сохранены!');
+      }, error => {
+        console.log(error);
+        this.notifierService.notify('error', 'Произошла ошибка сохранения! ' + error.error.message);
+      })
+  }
+
+  saveUserBySelf(user : User) {
+    return this.http.post<User>( globals.server + '/api/v1/users/update', user)
       .subscribe(response => {
         this.notifierService.notify('success', 'Данные сохранены!');
       }, error => {
