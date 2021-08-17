@@ -1,0 +1,30 @@
+.vacations-table-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.vacations-table-list span {
+  display: block;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 10px 10px;
+  margin: 3px 3px 3px 3px;
+}
+.mat-header-cell {
+  font-size: 14px !important;
+}
+.clickable {
+  cursor: pointer;
+}
+.organisation-table {
+  width: 100%;
+}
+.element-detail {
+  overflow: hidden;
+  display: flex;
+}
+.detail-row {
+  height: 0;
+}

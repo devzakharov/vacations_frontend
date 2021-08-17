@@ -5,6 +5,9 @@ import {Organisation} from "../../model/Organisation";
 import {DepartmentService} from "../department/department.service";
 import {Department} from "../../model/Department";
 import {HRDepartment} from "../../model/HRDepartment";
+import {HROrganisation} from "../../model/HROrganisation";
+import {User} from "../../model/User";
+import {Role} from "../../model/Role";
 
 
 @Injectable({
@@ -32,7 +35,12 @@ export class OrganisationService {
   }
 
   getUsersGroupingByDepartments(organisationId : number) {
-    return this.http.get<HRDepartment[]>(globals.server + '/api/v1/organisations/organisation?id=' + organisationId);
+    return this.http.get<HROrganisation>(globals.server + '/api/v1/organisations/organisation?id=' + organisationId);
   }
 
+  hasDepartmentHeadRole(user: User) {
+    return user.roles.some(role => {
+      return role.displayName === Role.ROLE_DEPARTMENT_HEAD;
+    });
+  }
 }

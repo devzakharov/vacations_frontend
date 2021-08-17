@@ -1,4 +1,4 @@
-enum Role {
+export enum Role {
     ROLE_USER = "Сотрудник",
     ROLE_ADMIN = "Администратор",
     ROLE_GENERAL_MANAGER = "Генеральный Менеджер",
