@@ -8,6 +8,10 @@ import * as moment from "moment";
 import {HROrganisation} from "../../model/HROrganisation";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {HRUser} from "../../model/HRUser";
+import {VacationService} from "../../service/vacation/vacation.service";
+import {MatDialog} from "@angular/material/dialog";
+import {UserEditDialogComponent} from "../user-edit-dialog/user-edit-dialog.component";
+import {UserAddLeaveDialogComponent} from "../user-add-leave-dialog/user-add-leave-dialog.component";
 
 const ELEMENT_DATA: HRDepartment[] = [];
 
@@ -33,7 +37,9 @@ export class OrganisationComponent implements OnInit {
 
   constructor(public organisationService : OrganisationService,
               private headerService : HeaderService,
-              private userService : UserService) { }
+              private userService : UserService,
+              public vacationService : VacationService,
+              public dialog : MatDialog) { }
 
   ngOnInit(): void {
     this.getDataForComponent();
@@ -66,5 +72,39 @@ export class OrganisationComponent implements OnInit {
 
   parseStringToDate(dateString: string) {
     return moment(dateString).format('DD.MM.YYYY');
+  }
+
+  addLeaveDays(user: HRUser) {
+    console.log(user.vacations[0]);
+    this.vacationService.vacationTypeToEmoji(user.vacations[0]);
+    user.vacations.push(user.vacations[0]);
+  }
+
+  openUserEditDialog(user : HRUser, $event : any): void {
+    $event.stopPropagation();
+    const dialogRef = this.dialog.open(UserEditDialogComponent, {
+      // width: '350px',
+      data: user
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+      //update user object
+    });
+  }
+
+  openUserAddLeaveDialog(user : HRUser, $event : any) : void {
+    $event.stopPropagation();
+    const dialogRef = this.dialog.open(UserAddLeaveDialogComponent, {
+      // width: '350px',
+      data: user
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+      //update user object
+    });
   }
 }

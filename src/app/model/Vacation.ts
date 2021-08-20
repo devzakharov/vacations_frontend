@@ -1,22 +1,22 @@
 export class Vacation {
 
   id : number;
-  date_from : string;
-  date_to : string;
+  dateFrom : string;
+  dateTo : string;
   message : string;
-  vacation_type : string;
-  user_id : number;
-  department_head_approval : string;
+  vacationType : string;
+  userId : number;
+  departmentHeadApproval : string;
 
 
-  constructor(id : number, date_from: string, date_to: string, message: string, vacation_type: string, user_id: number, department_head_approval : string) {
-    this.date_from = date_from;
-    this.date_to = date_to;
+  constructor(id : number, dateFrom: string, dateTo: string, message: string, vacationType: string, userId: number, departmentHeadApproval : string) {
+    this.dateFrom = dateFrom;
+    this.dateTo = dateTo;
     this.message = message;
-    this.vacation_type = vacation_type;
-    this.user_id = user_id;
+    this.vacationType = vacationType;
+    this.userId = userId;
     this.id = id;
-    this.department_head_approval = department_head_approval;
+    this.departmentHeadApproval = departmentHeadApproval;
   }
 
 }

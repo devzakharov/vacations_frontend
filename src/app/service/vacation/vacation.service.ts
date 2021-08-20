@@ -75,4 +75,13 @@ export class VacationService {
   approveUserVacations(user: any) {
     return this.http.post<User>(globals.server + '/api/v1/vacations/department-head-approval', user);
   }
+
+  vacationTypeToEmoji (vacation: Vacation) {
+    if (vacation.vacationType === 'COMMON') return "🌴";
+    if (vacation.vacationType === 'SICK_LEAVE') return "🤒";
+    if (vacation.vacationType === 'UNPAID_LEAVE') return "🚶";
+    if (vacation.vacationType === 'MATERNITY_LEAVE') return "👶";
+    if (vacation.vacationType === 'LEAVE_DAY') return "😎";
+    return vacation.vacationType;
+  }
 }

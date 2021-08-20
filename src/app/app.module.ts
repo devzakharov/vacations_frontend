@@ -5,7 +5,7 @@ import { NotifierModule } from 'angular-notifier';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './component/login/login.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { HeaderComponent } from './component/header/header.component';
@@ -31,6 +31,9 @@ import { DepartmentComponent } from './component/department/department.component
 import { OrganisationComponent } from './component/organisation/organisation.component';
 import { AllOrganisationsComponent } from './component/all-organisations/all-organisations.component';
 import {MatTable, MatTableModule} from "@angular/material/table";
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { UserEditDialogComponent } from './component/user-edit-dialog/user-edit-dialog.component';
+import { UserAddLeaveDialogComponent } from './component/user-add-leave-dialog/user-add-leave-dialog.component';
 
 
 const appRoutes: Routes = [
@@ -56,6 +59,8 @@ const appRoutes: Routes = [
     DepartmentComponent,
     OrganisationComponent,
     AllOrganisationsComponent,
+    UserEditDialogComponent,
+    UserAddLeaveDialogComponent,
   ],
   imports: [
     MatNativeDateModule,
@@ -64,7 +69,6 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     NotifierModule.withConfig({}),
     HttpClientModule,
-    ReactiveFormsModule,
     RouterModule.forRoot(appRoutes),
     MatDatepickerModule,
     MatFormFieldModule,
@@ -77,7 +81,9 @@ const appRoutes: Routes = [
     MatListModule,
     MatSelectModule,
     MatDialogModule,
-    MatTableModule
+    MatTableModule,
+    MatTooltipModule,
+    FormsModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'ru'},

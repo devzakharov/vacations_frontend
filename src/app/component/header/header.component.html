@@ -33,6 +33,9 @@
       <ul class="col-auto">
 
         <li (click)="toAllOrganisations()" *ngIf="this.headerService.isAdmin() ||
+        this.headerService.isPersonnelOfficer()">График отсутствий</li>
+
+        <li (click)="toAllOrganisations()" *ngIf="this.headerService.isAdmin() ||
         this.headerService.isGeneralManager()">Организации</li>
 
         <li (click)="toOrganisation()" *ngIf="

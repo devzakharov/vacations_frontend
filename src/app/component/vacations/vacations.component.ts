@@ -99,7 +99,7 @@ export class VacationsComponent implements OnInit {
   removeVacation(vacation : Vacation) {
     this.vacationService.removeVacation(vacation).subscribe((response) => {
       console.log(response);
-      this.notifier.notify('success', 'Отпуск ' + vacation.date_from + ' - ' + vacation.date_to + ' удален!');
+      this.notifier.notify('success', 'Отпуск ' + vacation.dateFrom + ' - ' + vacation.dateTo + ' удален!');
       this.vacationService.commonVacations = [];
       this.vacationService.uncommonVacations = [];
       this.ngOnInit();
@@ -170,7 +170,7 @@ export class VacationsComponent implements OnInit {
 
     this.vacationService.getAllCommonVacations().subscribe(response => {
       if (response.some(vacation => {
-          return vacation.department_head_approval === 'APPROVED';
+          return vacation.departmentHeadApproval === 'APPROVED';
         }
       )) {
         this.notifier.notify('error', 'Вы уже отправили свой график на утверждение!')
@@ -214,7 +214,7 @@ export class VacationsComponent implements OnInit {
   userConfirmationRollBack() {
     this.vacationService.getAllCommonVacations().subscribe(response => {
       if (response.some(vacation => {
-        return vacation.department_head_approval === 'APPROVED';
+        return vacation.departmentHeadApproval === 'APPROVED';
       }
         )) {
         // console.log('APPROVED');
@@ -241,11 +241,20 @@ export class VacationsComponent implements OnInit {
   }
 
   unblockUserChanges () {
-    if (moment().diff(moment(this.conditionService.deadline, 'DD.MM.YYYY'), 'days') < 0) {
-      this.vacationService.blockChanges = false;
-    } else {
-      this.notifier.notify('warning', 'Вы просрочили крайнюю дату заполнения графика, обратитесь к руководителю отдела!');
-    }
+    this.vacationService.getDeadline().subscribe(response => {
+      if (moment().diff(moment(response, 'YYYY-MM-DD'), 'days') < 0) {
+        this.vacationService.blockChanges = false;
+      } else {
+        console.log(response);
+        console.log(moment(response, 'YYYY-MM-DD'));
+        console.log(moment().diff(moment(response, 'YYYY-MM-DD'), 'days') < 0);
+        console.log(moment().diff(moment(response, 'YYYY-MM-DD'), 'days'));
+        console.log(moment());
+        this.notifier.notify('warning', 'Вы просрочили крайнюю дату заполнения графика, обратитесь к руководителю отдела!');
+      }
+    }, error => {
+      console.error(error);
+    })
   }
 
   showWarningOnClick () {
@@ -315,8 +324,8 @@ export class AddVacationDialog {
       this.notifierService.notify('error', 'Форма заполнена некорректно!');
     }
     console.log(this.addVacationForm);
-    this.vacationForSave.date_from = this.addVacationForm.value.start;
-    this.vacationForSave.date_to = this.addVacationForm.value.end;
+    this.vacationForSave.dateFrom = this.addVacationForm.value.start;
+    this.vacationForSave.dateTo = this.addVacationForm.value.end;
     this.vacationForSave.message = this.addVacationForm.value.message;
   }
 }

@@ -20,7 +20,7 @@ export class VacationsFilter implements PipeTransform {
     });
 
     return items.filter(item => {
-      return monthsNumbersArr.includes(moment(item.date_from).format('MM'));
+      return monthsNumbersArr.includes(moment(item.dateFrom).format('MM'));
     });
   }
 }

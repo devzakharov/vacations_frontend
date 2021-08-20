@@ -17,21 +17,21 @@
   <div class="row">
     <h2 class="period-header">{{this.vacationPeriods[0]}}</h2>
     <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[0])" class="col-auto vacation-item">
-      <button mat-mini-fab color="disabled" title="Удалить отпуск">
+      <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск">
         <mat-icon (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
       </button>
         <mat-form-field appearance="fill">
-          <mat-label>{{vacation.message}} {{vacation.vacation_type}}</mat-label>
+          <mat-label>{{vacation.message}} {{vacation.vacationType}}</mat-label>
           <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate [value]="vacation.date_from">
-            <input matEndDate [value]="vacation.date_to">
+            <input matStartDate [value]="vacation.dateFrom">
+            <input matEndDate [value]="vacation.dateTo">
           </mat-date-range-input>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
     </div>
     <div class="col-auto">
-      <button  title="Добавить отпуск" mat-fab color="primary" aria-label="Добавить отпуск" (click)="openDialog(this.vacationPeriods[0])">
+      <button  matTooltip="Добавить отпуск" mat-fab color="primary" aria-label="Добавить отпуск" (click)="openDialog(this.vacationPeriods[0])">
         <mat-icon>add</mat-icon>
       </button>
     </div>
@@ -39,21 +39,21 @@
   <div class="row">
     <h2 class="period-header">{{this.vacationPeriods[1]}}</h2>
     <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[1])" class="col-auto vacation-item">
-      <button mat-mini-fab color="disabled" title="Удалить отпуск">
+      <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск">
         <mat-icon  (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
       </button>
       <mat-form-field appearance="fill">
-        <mat-label>{{vacation.message}} {{vacation.vacation_type}}</mat-label>
+        <mat-label>{{vacation.message}} {{vacation.vacationType}}</mat-label>
         <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate [value]="vacation.date_from">
-          <input matEndDate [value]="vacation.date_to">
+          <input matStartDate [value]="vacation.dateFrom">
+          <input matEndDate [value]="vacation.dateTo">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
     </div>
     <div class="col-auto">
-      <button title="Добавить отпуск" mat-fab color="primary" aria-label="Добавить отпуск" (click)="openDialog(this.vacationPeriods[1])">
+      <button matTooltip="Добавить отпуск" mat-fab color="primary" aria-label="Добавить отпуск" (click)="openDialog(this.vacationPeriods[1])">
         <mat-icon>add</mat-icon>
       </button>
     </div>
@@ -64,10 +64,10 @@
   <div class="row" *ngIf="this.vacationService.uncommonVacations.length > 0">
     <div *ngFor="let vacation of this.vacationService.uncommonVacations" class="col-auto vacation-item">
       <mat-form-field appearance="fill">
-        <mat-label>{{vacation.message}} {{vacation.vacation_type}}</mat-label>
+        <mat-label>{{vacation.message}} {{vacation.vacationType}}</mat-label>
         <mat-date-range-input [rangePicker]="picker">
-          <input readonly disabled matStartDate [value]="vacation.date_from">
-          <input readonly disabled matEndDate [value]="vacation.date_to">
+          <input readonly disabled matStartDate [value]="vacation.dateFrom">
+          <input readonly disabled matEndDate [value]="vacation.dateTo">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
@@ -77,10 +77,10 @@
 </div>
 <div class="container buttons-container">
   <div class="flex-row d-flex justify-content-center">
-    <button title="Отправить на утверждение руководителю" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.userConfirmVacations()">
+    <button matTooltip="Отправить на утверждение руководителю" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.userConfirmVacations()">
       <mat-icon>check</mat-icon><span> Отправить руководителю</span>
     </button>
-    <button title="Снять с утверждения" mat-raised-button color="accent" (click)="this.userConfirmationRollBack()">
+    <button matTooltip="Снять с утверждения" mat-raised-button color="accent" (click)="this.userConfirmationRollBack()">
       <mat-icon>restore</mat-icon><span> Скорректировать график</span>
     </button>
   </div>
