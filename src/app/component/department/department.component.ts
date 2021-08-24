@@ -97,10 +97,13 @@ export class DepartmentComponent implements OnInit {
   }
 
   isUserVacationsApprovedByHead(vacations : Vacation[]) {
-    let found = vacations.some(function (el) {
-      // @ts-ignore
-      return el.departmentHeadApproval === 'NOT_APPROVED';
-    });
-    return !found;
+    if (vacations) {
+      let found = vacations.some(function (el) {
+        return el.departmentHeadApproval === 'NOT_APPROVED';
+      });
+      return !found;
+    } else {
+      return false;
+    }
   }
 }

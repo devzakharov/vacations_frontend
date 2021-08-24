@@ -34,6 +34,7 @@ import {MatTable, MatTableModule} from "@angular/material/table";
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { UserEditDialogComponent } from './component/user-edit-dialog/user-edit-dialog.component';
 import { UserAddLeaveDialogComponent } from './component/user-add-leave-dialog/user-add-leave-dialog.component';
+import { MatCheckboxModule} from "@angular/material/checkbox";
 
 
 const appRoutes: Routes = [
@@ -83,7 +84,8 @@ const appRoutes: Routes = [
     MatDialogModule,
     MatTableModule,
     MatTooltipModule,
-    FormsModule
+    FormsModule,
+    MatCheckboxModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'ru'},

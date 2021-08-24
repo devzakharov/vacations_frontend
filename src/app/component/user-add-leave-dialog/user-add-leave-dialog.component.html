@@ -1,5 +1,30 @@
 <h1 mat-dialog-title>Добавление отсутствия для {{data.firstName}} {{data.lastName}}</h1>
+<div mat-dialog-content class="add-leave-user-dialog">
+  <mat-form-field appearance="fill">
+    <mat-label>Тип отсутствия</mat-label>
+    <mat-select (selectionChange)="setVacationType($event)" name="vacation_type" [value]="">
+      <mat-option *ngFor="let vacationType of this.vacationTypes" [value]="vacationType.name">
+        {{vacationType.displayName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="vacation">
+    <mat-label>Сообщение</mat-label>
+    <input matInput [(ngModel)]="vacation.message">
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="vacation">
+    <mat-label>Выберите даты</mat-label>
+    <!--  [matDatepickerFilter]="monthFilter"-->
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate [(ngModel)]="vacation.dateFrom" placeholder="Начало отпуска">
+      <input matEndDate [(ngModel)]="vacation.dateTo" placeholder="Конец отпуска">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker startView="year" [startAt]="vacation.dateFrom" ></mat-date-range-picker>
+  </mat-form-field>
+</div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Отмена</button>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Сохранить</button>
+<!--  <button mat-button [mat-dialog-close]="vacation" cdkFocusInitial>Сохранить</button>-->
+  <button mat-button (click)="this.saveVacation()" cdkFocusInitial>Сохранить</button>
 </div>

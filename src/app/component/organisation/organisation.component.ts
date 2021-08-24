@@ -59,7 +59,7 @@ export class OrganisationComponent implements OnInit {
             console.log(department);
             ELEMENT_DATA.push(department);
           });
-          console.log(this.dataSource);
+          // console.log(this.dataSource);
         }, error => {
           console.log(error);
         });
@@ -83,28 +83,35 @@ export class OrganisationComponent implements OnInit {
   openUserEditDialog(user : HRUser, $event : any): void {
     $event.stopPropagation();
     const dialogRef = this.dialog.open(UserEditDialogComponent, {
-      // width: '350px',
+      width: '480px',
       data: user
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
-      //update user object
+      console.log('The dialog (openUserEditDialog) was closed');
+      this.getDataForComponent();
     });
   }
 
   openUserAddLeaveDialog(user : HRUser, $event : any) : void {
     $event.stopPropagation();
     const dialogRef = this.dialog.open(UserAddLeaveDialogComponent, {
-      // width: '350px',
+      width: '480px',
       data: user
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      console.log('The dialog (openUserAddLeaveDialog) was closed');
       console.log(result);
-      //update user object
     });
+  }
+
+  userHasNotCommonVacations(user : HRUser) : boolean {
+    if (user.vacations) {
+      if (!user.vacations.some(vacation => {
+        return vacation.vacationType === "COMMON"
+      })) return true;
+    }
+    return false;
   }
 }

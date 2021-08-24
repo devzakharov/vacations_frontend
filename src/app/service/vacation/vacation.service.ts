@@ -84,4 +84,8 @@ export class VacationService {
     if (vacation.vacationType === 'LEAVE_DAY') return "😎";
     return vacation.vacationType;
   }
+
+  getVacationTypes() {
+    return this.http.get<any[]>(globals.server + '/api/v1/vacations/vacation-types');
+  }
 }

@@ -1,0 +1,11 @@
+.edit-user-dialog-inputs {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.edit-user-dialog-title {
+  margin-top: 0 !important;
+}
+.mat-dialog-content {
+  overflow: unset;
+}
