@@ -1,0 +1,30 @@
+<div class="container special-container">
+  <div class="row">
+    <h1>График отсутствий</h1>
+  </div>
+  <div class="row">
+    <div class="table-date-container align-self-center">
+      <button mat-mini-fab color="disabled" (click)="prevMonth()"><mat-icon class="grey-icon">keyboard_arrow_left</mat-icon></button>
+      <div class="table-current-month">{{this.currentDate.format('MMMM YYYY').toUpperCase()}}</div>
+      <button mat-mini-fab color="disabled" (click)="nextMonth()"><mat-icon class="grey-icon">keyboard_arrow_right</mat-icon></button>
+    </div>
+  </div>
+  <div class="row">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef width="{{employeeCellWidth}}"> Сотрудник </th>
+        <td mat-cell *matCellDef="let user" width="{{employeeCellWidth}}" id="{{'user-id-' + user.id}}"> {{user.lastName + ' ' + user.firstName}} </td>
+      </ng-container>
+
+      <ng-container *ngFor="let day of currentMonthDates" [matColumnDef]="day.format('DD.MM.YYYY')">
+        <th mat-header-cell *matHeaderCellDef class="text-center absence-table-header-cell">{{day.format('DD')}}</th>
+        <td mat-cell *matCellDef="let user" class="absence-table-empty-cell">
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" id="user-row-id-{{row.id}}" class="user-row"></tr>
+    </table>
+  </div>
+</div>

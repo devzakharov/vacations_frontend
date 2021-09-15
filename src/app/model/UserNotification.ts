@@ -1,17 +1,15 @@
 export class UserNotification {
 
   id: number;
-  senderId : number;
-  recipientId : number | undefined;
+  recipientId : number;
   header: string;
   message: string;
 
 
-  constructor(id: number, header: string, message: string, senderId : number, recipientId?: number) {
+  constructor(id: number, header: string, message: string, recipientId: number) {
     this.id = id;
     this.header = header;
     this.message = message;
-    this.senderId = senderId;
     this.recipientId = recipientId;
   }
 

@@ -44,10 +44,6 @@ export class VacationService {
     return this.http.get<Moment>(globals.server + '/api/v1/vacations/deadline');
   }
 
-  getAvailableDays() {
-
-  }
-
   getVacationPeriods() {
     return this.http.get<string[]>(globals.server + '/api/v1/vacations/periods');
   }
@@ -82,10 +78,15 @@ export class VacationService {
     if (vacation.vacationType === 'UNPAID_LEAVE') return "🚶";
     if (vacation.vacationType === 'MATERNITY_LEAVE') return "👶";
     if (vacation.vacationType === 'LEAVE_DAY') return "😎";
+    if (vacation.vacationType === 'BUSINESS_TRIP') return "💼";
     return vacation.vacationType;
   }
 
   getVacationTypes() {
     return this.http.get<any[]>(globals.server + '/api/v1/vacations/vacation-types');
+  }
+
+  disapproveUserVacations(user: any) {
+    return this.http.post<User>(globals.server + '/api/v1/vacations/department-head-disapproval', user);
   }
 }

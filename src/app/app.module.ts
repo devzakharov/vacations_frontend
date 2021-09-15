@@ -35,6 +35,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { UserEditDialogComponent } from './component/user-edit-dialog/user-edit-dialog.component';
 import { UserAddLeaveDialogComponent } from './component/user-add-leave-dialog/user-add-leave-dialog.component';
 import { MatCheckboxModule} from "@angular/material/checkbox";
+import { UserAddDialogComponent } from './component/user-add-dialog/user-add-dialog.component';
+import { DepartmentAddDialogComponent } from './component/department-add-dialog/department-add-dialog.component';
+import { AbsenceCalendarComponent } from './component/absence-calendar/absence-calendar.component';
 
 
 const appRoutes: Routes = [
@@ -44,6 +47,7 @@ const appRoutes: Routes = [
   { path: 'department', component: DepartmentComponent},
   { path: 'organisation', component: OrganisationComponent},
   { path: 'all-organisations', component: AllOrganisationsComponent},
+  { path: 'absence-calendar', component: AbsenceCalendarComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full'},
 ]
 
@@ -62,6 +66,9 @@ const appRoutes: Routes = [
     AllOrganisationsComponent,
     UserEditDialogComponent,
     UserAddLeaveDialogComponent,
+    UserAddDialogComponent,
+    DepartmentAddDialogComponent,
+    AbsenceCalendarComponent,
   ],
   imports: [
     MatNativeDateModule,

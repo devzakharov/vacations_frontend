@@ -8,12 +8,12 @@ import {Moment} from "moment/moment"
 import * as moment from 'moment/moment';
 import 'moment/locale/ru'
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {ConditionService} from "../../service/conditions/condition.service";
 import {HeaderService} from "../../service/header/header.service";
 import {UserService} from "../../service/user/user.service";
 import {NotificationService} from "../../service/notification/notification.service";
-import {UserNotification} from "../../model/UserNotification";
+import {NotificationToSend} from "../../model/NotificationToSend";
 
 @Component({
   selector: 'app-vacations',
@@ -47,12 +47,13 @@ export class VacationsComponent implements OnInit {
 
       this.vacationService.getAllCommonVacations().subscribe(
         (response) => {
-          // this.notifier.notify('success', 'Отпуска загруженны!');
           console.log(response);
           this.vacationService.commonVacations = [];
+          console.log(this.vacationService.commonVacations)
           response.forEach(vacation => {
             this.vacationService.commonVacations.push(vacation);
           });
+          console.log(this.vacationService.commonVacations)
         }, error => {
           console.log(error);
           this.notifier.notify('error', error.error.error + " " + error.error.message);
@@ -145,7 +146,6 @@ export class VacationsComponent implements OnInit {
   }
 
 
-
   openDialog(data : string) {
     this.dialog.open(AddVacationDialog, {
       data: {
@@ -153,8 +153,9 @@ export class VacationsComponent implements OnInit {
       },
       width : '300px'
     });
-    // console.log(this.convertStringToMoments(data));
   }
+
+
 
   convertStringToMoments(data : string) : Moment[] {
     let momentArr : any[] = [];
@@ -178,28 +179,25 @@ export class VacationsComponent implements OnInit {
         if (this.conditionService.checkConditions()) {
           this.vacationService.userConfirmVacations().subscribe(
             response => {
+
               this.headerService.currentUser.vacationsApproval = response.vacationsApproval;
+
               this.blockUserChanges();
-              this.notifier.notify('success', 'График отпусков отправлен на утверждение руководителю отдела.')
 
-              let notification = new UserNotification(
-                0,
-                'Пользователь внес отпуска',
-                this.notificationService.userSendVacationsForApproveMessage(),
-                this.headerService.currentUser.id,
-                0
+              let notification = new NotificationToSend(
+                'USER_SEND_VACATIONS_TO_DEPARTMENT_HEAD_APPROVAL',
+                this.headerService.currentUser.id
               );
-
-              console.log(notification);
 
               this.notificationService.sendNotification(notification).subscribe(response => {
                 console.log(response);
               }, error => {
                 console.log(error);
               });
+
+              this.notifier.notify('success', 'График отпусков отправлен на утверждение руководителю отдела.')
             },
             error => {
-              // console.log(error);
               this.notifier.notify('error', error.error.message);
             });
         } else {
@@ -217,13 +215,10 @@ export class VacationsComponent implements OnInit {
         return vacation.departmentHeadApproval === 'APPROVED';
       }
         )) {
-        // console.log('APPROVED');
         this.notifier.notify('error', 'Вы не можете скорректировать график! Начальник отдела уже утвердил Ваш график отпусков.')
       } else {
-        // console.log('NOT_APPROVED');
         this.vacationService.userConfirmationRollBack().subscribe(
           response => {
-            // console.log(response);
             this.headerService.currentUser.vacationsApproval = response.vacationsApproval;
             this.unblockUserChanges();
           }, error => {
@@ -290,7 +285,7 @@ export class AddVacationDialog {
 
   startDate = new Date();
   addVacationForm: FormGroup;
-  vacationForSave : Vacation = new Vacation(0, '', '', '', 'COMMON', 0, '');
+  vacationForSave : Vacation = new Vacation(0, '', '', '', 'COMMON', 0, 'NOT_APPROVED');
 
   monthFilter = (m: Date | null): boolean => {
     const month = (m || new Date()).getMonth();
@@ -309,11 +304,14 @@ export class AddVacationDialog {
       error => {
         console.log(error);
         this.notifierService.notify('error', error.error.message);
+        this.conditionService.setConditionsFlag();
         if (error.error.message === 'User days limit exceeded') {
           this.notifierService.notify('error', 'Превышен лимит дней!')
+          this.conditionService.setConditionsFlag();
         }
         if (error.error.message === 'Vacations ranges is crossing') {
           this.notifierService.notify('error', 'Введенный отпуск пересекается по датам с другим вашим отпуском!')
+          this.conditionService.setConditionsFlag();
         }
       }
     );
@@ -323,9 +321,10 @@ export class AddVacationDialog {
     if (this.addVacationForm.status === 'INVALID') {
       this.notifierService.notify('error', 'Форма заполнена некорректно!');
     }
-    console.log(this.addVacationForm);
     this.vacationForSave.dateFrom = this.addVacationForm.value.start;
     this.vacationForSave.dateTo = this.addVacationForm.value.end;
     this.vacationForSave.message = this.addVacationForm.value.message;
   }
+
+
 }

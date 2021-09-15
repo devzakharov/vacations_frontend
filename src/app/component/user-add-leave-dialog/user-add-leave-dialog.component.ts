@@ -4,6 +4,10 @@ import * as moment from 'moment';
 import {HRUser} from "../../model/HRUser";
 import {Vacation} from "../../model/Vacation";
 import {VacationService} from "../../service/vacation/vacation.service";
+import {NotificationToSend} from "../../model/NotificationToSend";
+import {NotifierService} from "angular-notifier";
+import {NotificationService} from "../../service/notification/notification.service";
+import {HeaderService} from "../../service/header/header.service";
 
 @Component({
   selector: 'app-user-add-leave-dialog',
@@ -18,7 +22,9 @@ export class UserAddLeaveDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<UserAddLeaveDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: HRUser,
-    private vacationService : VacationService) {}
+    private vacationService : VacationService,
+    private notificationService : NotificationService,
+    private headerService : HeaderService) {}
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -69,6 +75,19 @@ export class UserAddLeaveDialogComponent implements OnInit {
         console.log(response);
         if (this.data.vacations === null) this.data.vacations = [];
         this.data.vacations.push(response);
+
+        let notification = new NotificationToSend(
+          'PERSONNEL_OFFICER_ADDED_NEW_LEAVE',
+          this.headerService.currentUser.id,
+          this.data.id
+        );
+
+        this.notificationService.sendNotification(notification).subscribe(response => {
+          console.log(response);
+        }, error => {
+          console.log(error);
+        });
+
         this.dialogRef.close();
       },
       error => {

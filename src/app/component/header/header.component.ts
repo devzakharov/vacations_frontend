@@ -42,7 +42,6 @@ export class HeaderComponent implements OnInit {
     this.router.navigateByUrl('/vacations');
   }
 
-
   toAllOrganisations() {
     this.router.navigateByUrl('/all-organisations');
   }
@@ -53,5 +52,9 @@ export class HeaderComponent implements OnInit {
 
   toDepartment() {
     this.router.navigateByUrl('/department');
+  }
+
+  toAbsenceCalendar() {
+    this.router.navigateByUrl('/absence-calendar');
   }
 }

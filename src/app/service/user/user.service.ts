@@ -19,4 +19,8 @@ export class UserService {
   saveUser(user : HRUser) {
     return this.http.post<HRUser>(globals.server + '/api/v1/users/update', user);
   }
+
+  addNewUser(user: HRUser) {
+    return this.http.put<HRUser>(globals.server + '/api/v1/users/add', user);
+  }
 }

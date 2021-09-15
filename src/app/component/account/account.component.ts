@@ -71,13 +71,31 @@ export class AccountComponent implements OnInit {
 
   saveUser() {
     if (this.comparePasswords() && this.emailValidation()) {
+
       this.fillUserObjectFromFormFields();
       this.headerService.getRolesArray(localStorage.getItem('token'));
-      console.log(this.headerService.currentUserRoles);
+      // console.log(this.headerService.currentUserRoles);
+
       if (this.headerService.currentUserRoles.some(val => val === "ROLE_ADMIN")) {
-        this.accountService.saveUserByAdmin(this.currentUser);
+
+        this.accountService.saveUserByAdmin(this.currentUser).subscribe(response => {
+            this.notifierService.notify('success', 'Данные сохранены!');
+            this.getUser();
+          }, error => {
+            console.log(error);
+            this.notifierService.notify('error', 'Произошла ошибка сохранения! ' + error.error.message);
+          });
+
       } else if (this.headerService.currentUserRoles.some(val => val === "ROLE_USER")) {
-        this.accountService.saveUserBySelf(this.currentUser);
+
+        this.accountService.saveUserBySelf(this.currentUser).subscribe(response => {
+          this.notifierService.notify('success', 'Данные сохранены!');
+          this.getUser();
+        }, error => {
+          console.log(error);
+          this.notifierService.notify('error', 'Произошла ошибка сохранения! ' + error.error.message);
+        });
+
       }
     }
     console.log(this.form);

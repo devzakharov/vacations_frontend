@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import * as globals from "../../globals";
 import {Department} from "../../model/Department";
 import {User} from "../../model/User";
 import {Vacation} from "../../model/Vacation";
+import {HRDepartment} from "../../model/HRDepartment";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class DepartmentService {
   setDepartmentArray() {
     this.getCurrentUserDepartmentsArray().subscribe(response => {
       this.departmentsArray = response;
-      console.log(response);
+      // console.log(response);
     }, error => {
       console.log(error);
     });
@@ -32,7 +33,7 @@ export class DepartmentService {
     return this.http.get<Department[]>( globals.server + '/api/v1/departments/all-by-organisation?organisation=' + id).subscribe(
       response => {
         this.departmentsArray = response;
-        console.log(response);
+        console.log(response, id);
       }, error => {
         console.log(error);
       }
@@ -45,5 +46,21 @@ export class DepartmentService {
 
   approveUserVacations(vacationArray : Vacation[]) {
     return this.http.post(globals.server + '/api/v1/vacations/approve-vacations', vacationArray);
+  }
+
+  deleteDepartment(department : HRDepartment) {
+
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: department
+    };
+
+    return this.http.delete(globals.server + '/api/v1/departments/delete', options);
+  }
+
+  addDepartment(department : any) {
+    return this.http.put<any>(globals.server + '/api/v1/departments/add', department);
   }
 }

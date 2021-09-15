@@ -28,7 +28,7 @@ export class OrganisationService {
   setOrganisationArray() {
     this.getOrganisationArray().subscribe(response => {
       this.organisationsArray = response;
-      console.log(response);
+      // console.log(response);
     }, error => {
       console.log(error);
     });

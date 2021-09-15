@@ -1,13 +1,12 @@
 <div class="container vacations-container">
-  <div class="vacations-blocker" (click)="this.showWarningOnClick()" *ngIf="this.vacationService.blockChanges"></div>
   <div class="row">
     <h1>Мой отпуск</h1>
   </div>
   <div class="row">
     <h2>Условия</h2>
     <div class="vacations-checks" [ngClass]="[this.conditionService.conditionsFlag ? 'pass' : 'denied']">
-<!--      <p *ngIf="this.conditions.distributedDays != 28">Распределено дней: {{this.conditions.distributedDays}} из 28</p>-->
-      <p>Распределено дней: {{this.conditionService.distributedDays}} из 28</p>
+      <p>Распределено календарных дней: {{this.conditionService.distributedDays}} из 28</p>
+      <p>Распределено рабочих дней: {{this.conditionService.distributedDays}} из 20</p>
       <p>Крайняя дата заполнения: {{this.conditionService.deadline}}</p>
       <p *ngIf="!this.conditionService.twoWeeksInRow">Один из отпусков по длительности не менее 14 дней!</p>
       <p *ngIf="this.conditionService.conditionsFlag">Вы можете отправить свои отпуска на утверждение руководителю отдела!
@@ -17,20 +16,20 @@
   <div class="row">
     <h2 class="period-header">{{this.vacationPeriods[0]}}</h2>
     <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[0])" class="col-auto vacation-item">
-      <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск">
+      <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">
         <mat-icon (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
       </button>
         <mat-form-field appearance="fill">
-          <mat-label>{{vacation.message}} {{vacation.vacationType}}</mat-label>
+          <mat-label>{{vacation.message}}</mat-label>
           <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate [value]="vacation.dateFrom">
-            <input matEndDate [value]="vacation.dateTo">
+            <input [attr.readonly] = "this.vacationService.blockChanges ? '' : null"  matStartDate [value]="vacation.dateFrom">
+            <input [attr.readonly] = "this.vacationService.blockChanges ? '' : null"  matEndDate [value]="vacation.dateTo">
           </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker-toggle *ngIf="!this.vacationService.blockChanges" matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
     </div>
-    <div class="col-auto">
+    <div class="col-auto" *ngIf="!this.vacationService.blockChanges">
       <button  matTooltip="Добавить отпуск" mat-fab color="primary" aria-label="Добавить отпуск" (click)="openDialog(this.vacationPeriods[0])">
         <mat-icon>add</mat-icon>
       </button>
@@ -39,20 +38,20 @@
   <div class="row">
     <h2 class="period-header">{{this.vacationPeriods[1]}}</h2>
     <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[1])" class="col-auto vacation-item">
-      <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск">
+      <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">
         <mat-icon  (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
       </button>
       <mat-form-field appearance="fill">
-        <mat-label>{{vacation.message}} {{vacation.vacationType}}</mat-label>
+        <mat-label>{{vacation.message}}</mat-label>
         <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate [value]="vacation.dateFrom">
-          <input matEndDate [value]="vacation.dateTo">
+          <input [attr.readonly] = "this.vacationService.blockChanges ? '' : null"  matStartDate [value]="vacation.dateFrom">
+          <input [attr.readonly] = "this.vacationService.blockChanges ? '' : null"  matEndDate [value]="vacation.dateTo">
         </mat-date-range-input>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker-toggle *ngIf="!this.vacationService.blockChanges" matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
     </div>
-    <div class="col-auto">
+    <div class="col-auto" *ngIf="!this.vacationService.blockChanges">
       <button matTooltip="Добавить отпуск" mat-fab color="primary" aria-label="Добавить отпуск" (click)="openDialog(this.vacationPeriods[1])">
         <mat-icon>add</mat-icon>
       </button>
@@ -64,23 +63,27 @@
   <div class="row" *ngIf="this.vacationService.uncommonVacations.length > 0">
     <div *ngFor="let vacation of this.vacationService.uncommonVacations" class="col-auto vacation-item">
       <mat-form-field appearance="fill">
-        <mat-label>{{vacation.message}} {{vacation.vacationType}}</mat-label>
-        <mat-date-range-input [rangePicker]="picker">
-          <input readonly disabled matStartDate [value]="vacation.dateFrom">
-          <input readonly disabled matEndDate [value]="vacation.dateTo">
+        <mat-label>{{vacation.message}}</mat-label>
+        <mat-date-range-input>
+          <input readonly  matStartDate [value]="vacation.dateFrom">
+          <input readonly  matEndDate [value]="vacation.dateTo">
         </mat-date-range-input>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
     </div>
   </div>
 </div>
 <div class="container buttons-container">
   <div class="flex-row d-flex justify-content-center">
-    <button matTooltip="Отправить на утверждение руководителю" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.userConfirmVacations()">
+    <button matTooltip="Вы уже отправили свой график на утверждение" style="margin-right: 13px" mat-raised-button color="disabled" *ngIf="vacationService.blockChanges">
+      <mat-icon>check</mat-icon><span> Отправлено руководителю</span>
+    </button>
+    <button matTooltip="Отправить на утверждение руководителю" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.userConfirmVacations()" *ngIf="!vacationService.blockChanges">
       <mat-icon>check</mat-icon><span> Отправить руководителю</span>
     </button>
-    <button matTooltip="Снять с утверждения" mat-raised-button color="accent" (click)="this.userConfirmationRollBack()">
+    <button matTooltip="Вы еще не отправили график на утверждение руководителю" mat-raised-button color="disabled" *ngIf="!vacationService.blockChanges">
+      <mat-icon>restore</mat-icon><span> Скорректировать график</span>
+    </button>
+    <button matTooltip="Снять с утверждения" mat-raised-button color="accent" *ngIf="vacationService.blockChanges" (click)="this.userConfirmationRollBack()">
       <mat-icon>restore</mat-icon><span> Скорректировать график</span>
     </button>
   </div>

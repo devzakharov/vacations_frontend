@@ -9,6 +9,8 @@ import {VacationService} from "../../service/vacation/vacation.service";
 import {Vacation} from "../../model/Vacation";
 import {UserNotification} from "../../model/UserNotification";
 import {NotificationService} from "../../service/notification/notification.service";
+import {NotifierService} from "angular-notifier";
+import {NotificationToSend} from "../../model/NotificationToSend";
 
 const ELEMENT_DATA: User[] = [];
 
@@ -24,7 +26,8 @@ export class DepartmentComponent implements OnInit {
               private userService : UserService,
               private headerService : HeaderService,
               private vacationService : VacationService,
-              private notificationService : NotificationService) { }
+              private notificationService : NotificationService,
+              private notifierService : NotifierService) { }
 
   // @ts-ignore
   @ViewChild(MatTable) table: MatTable<User>;
@@ -71,10 +74,8 @@ export class DepartmentComponent implements OnInit {
 
       //on success will provide notification for user and change buttons state, notify user about success
 
-      let notification = new UserNotification(
-        0,
-        'Глава отдела утвердил график',
-        this.notificationService.departmentHeadApproveVacationsMessage(),
+      let notification = new NotificationToSend(
+'DEPARTMENT_HEAD_APPROVED_USER_VACATIONS',
         this.headerService.currentUser.id,
         user.id
       );
@@ -85,15 +86,36 @@ export class DepartmentComponent implements OnInit {
         console.log(error);
       });
 
-      console.log(notification);
-      console.log(ELEMENT_DATA);
     }, error => {
       console.log(error);
-      //error message
     });
   }
+
   disapproveUserVacations(user : any) {
-    console.log(user);
+    this.vacationService.disapproveUserVacations(user).subscribe(response => {
+      let index = ELEMENT_DATA.findIndex(user => {
+        return user.id === response.id;
+      });
+      ELEMENT_DATA[index] = response;
+      this.table.renderRows();
+
+      let notification = new NotificationToSend(
+        'DEPARTMENT_HEAD_REJECTED_USER_VACATIONS',
+        this.headerService.currentUser.id,
+        user.id
+      );
+
+      this.notificationService.sendNotification(notification).subscribe(response => {
+        // console.log(response);
+      }, error => {
+        console.log(error);
+      });
+
+      this.notifierService.notify("success", "Вы вернули на доработку график отпусков " + user.firstName + " " + user.lastName + "!");
+    }, error => {
+      console.log(error);
+      this.notifierService.notify("error", error.error.message);
+    })
   }
 
   isUserVacationsApprovedByHead(vacations : Vacation[]) {

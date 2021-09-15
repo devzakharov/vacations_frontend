@@ -2,12 +2,27 @@
   <div class="row">
     <ng-container *ngIf="organisation !== undefined">
       <h1>Организация ({{organisation.displayName}} ИНН:{{organisation.inn}})</h1>
+      <div class="buttons-container">
+        <button matTooltip="Добавить нового сотрудника" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.openAddUserDialog(organisation)">
+          <mat-icon>add</mat-icon><span> Добавить нового сотрудника</span>
+        </button>
+        <button matTooltip="Добавить отдел" mat-raised-button color="primary" (click)="this.openAddDepartmentDialog(organisation)">
+          <mat-icon>add</mat-icon><span> Добавить отдел</span>
+        </button>
+      </div>
     </ng-container>
     <ng-container *ngIf="organisation !== undefined" >
 
       <ng-container *ngFor="let department of organisation.departments">
-        <h2>{{department.displayName}}</h2>
-        <table mat-table [dataSource]="department.users" class="organisation-table mat-elevation-z8" multiTemplateDataRows>
+
+        <div class="button-and-header-container">
+          <button mat-mini-fab color="disabled" matTooltip="Удалить отдел" aria-label="Удалить отдел"(click)="this.deleteDepartment(department)">
+            <mat-icon class="gray-icon">clear</mat-icon>
+          </button>
+          <h2>{{department.displayName}} <span *ngIf="isAllCommonVacationsApproved(department) && isUsersHasVacations(department)">(Отдел утвержден руководителем)</span></h2>
+        </div>
+
+        <table mat-table [dataSource]="department.users" [class.vacations-approved]="isAllCommonVacationsApproved(department) && isUsersHasVacations(department)" class="organisation-table mat-elevation-z8" multiTemplateDataRows>
 
           <ng-container matColumnDef="user-name">
             <th mat-header-cell *matHeaderCellDef width="340"> Ф.И.О. </th>
@@ -56,11 +71,14 @@
                 <div class="vacations-table-list">
                   <ng-container *ngFor="let vacation of user.vacations">
                     <ng-container *ngIf="vacation.vacationType !== 'COMMON'">
-                      <span>
+                      <div class="vacation-item">
+                        <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск">
+                          <mat-icon  (click)="removeVacation(user, vacation)" class="gray-icon">delete</mat-icon>
+                        </button>
                         {{ this.vacationService.vacationTypeToEmoji(vacation) }}
                         {{ vacation.message }} <br>
                         {{'c: ' + this.parseStringToDate(vacation.dateFrom) + ' по: ' + this.parseStringToDate(vacation.dateTo)}}
-                      </span>
+                      </div>
                     </ng-container>
                   </ng-container>
                   <button matTooltip="Добавить отсутствие" mat-mini-fab color="primary" aria-label="Добавить отсутствие"

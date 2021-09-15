@@ -12,6 +12,14 @@ import {VacationService} from "../../service/vacation/vacation.service";
 import {MatDialog} from "@angular/material/dialog";
 import {UserEditDialogComponent} from "../user-edit-dialog/user-edit-dialog.component";
 import {UserAddLeaveDialogComponent} from "../user-add-leave-dialog/user-add-leave-dialog.component";
+import {Vacation} from "../../model/Vacation";
+import {NotificationToSend} from "../../model/NotificationToSend";
+import {NotificationService} from "../../service/notification/notification.service";
+import {UserAddDialogComponent} from "../user-add-dialog/user-add-dialog.component";
+import {DepartmentService} from "../../service/department/department.service";
+import {readSpanComment} from "@angular/compiler-cli/src/ngtsc/typecheck/src/comments";
+import {NotifierService} from "angular-notifier";
+import {DepartmentAddDialogComponent} from "../department-add-dialog/department-add-dialog.component";
 
 const ELEMENT_DATA: HRDepartment[] = [];
 
@@ -39,7 +47,10 @@ export class OrganisationComponent implements OnInit {
               private headerService : HeaderService,
               private userService : UserService,
               public vacationService : VacationService,
-              public dialog : MatDialog) { }
+              public dialog : MatDialog,
+              private notificationService : NotificationService,
+              private departmentService : DepartmentService,
+              private notifierService : NotifierService) { }
 
   ngOnInit(): void {
     this.getDataForComponent();
@@ -52,11 +63,11 @@ export class OrganisationComponent implements OnInit {
     this.userService.getUser().subscribe(
       response => {
         this.organisationService.getUsersGroupingByDepartments(response.organisationId).subscribe(response => {
-          // console.log(response);
+          console.log(response);
           ELEMENT_DATA.length = 0;
           this.organisation = response;
           response.departments.forEach(department => {
-            console.log(department);
+            // console.log(department);
             ELEMENT_DATA.push(department);
           });
           // console.log(this.dataSource);
@@ -96,7 +107,7 @@ export class OrganisationComponent implements OnInit {
   openUserAddLeaveDialog(user : HRUser, $event : any) : void {
     $event.stopPropagation();
     const dialogRef = this.dialog.open(UserAddLeaveDialogComponent, {
-      width: '480px',
+      width: '310px',
       data: user
     });
 
@@ -113,5 +124,95 @@ export class OrganisationComponent implements OnInit {
       })) return true;
     }
     return false;
+  }
+
+  isAllCommonVacationsApproved(department : HRDepartment) : boolean {
+
+    // console.log(department);
+
+    return !(department.users || []).some(
+      user => (user.vacations || []).some(
+        vacation => vacation.vacationType === 'COMMON' && vacation.departmentHeadApproval !== 'APPROVED'));
+
+  }
+
+  isUsersHasVacations(department : HRDepartment) : boolean {
+    return (department.users || []).some(
+      user => user.vacations !== null)
+  }
+
+  removeVacation(user : HRUser, vacation: Vacation) {
+    console.log(vacation);
+
+    this.vacationService.removeVacation(vacation).subscribe(
+      response => {
+        console.log(response);
+
+        //delete vacation from user object
+        let index = user.vacations.findIndex(v => v.id === vacation.id);
+        user.vacations.splice(index, 1);
+
+        //send notification to user
+        let notification = new NotificationToSend(
+          'PERSONNEL_OFFICER_DELETED_LEAVE',
+          this.headerService.currentUser.id,
+          user.id
+        );
+
+        this.notificationService.sendNotification(notification).subscribe(response => {
+          console.log(response);
+        }, error => {
+          console.log(error);
+        });
+
+      }, error => {
+        console.log(error);
+      }
+    );
+  }
+
+  openAddUserDialog(organisation: HROrganisation) {
+    const dialogRef = this.dialog.open(UserAddDialogComponent, {
+      width: '480px',
+      data: organisation
+    });
+
+    dialogRef.afterClosed().subscribe(response => {
+      console.log('The dialog openAddUserDialog was closed');
+      console.log(response);
+      this.ngOnInit();
+    });
+  }
+
+  deleteDepartment(department: HRDepartment) {
+    console.log(department);
+
+    if (department.users.length > 0 && department.users != null) {
+      this.notifierService.notify('warning', 'Отдел "' + department.displayName + '" нельзя удалить, т.к. в нем есть сотрудники!');
+      return;
+    }
+
+    this.departmentService.deleteDepartment(department).subscribe(
+      response => {
+        console.log(response);
+        this.ngOnInit();
+      }, error => {
+        console.log(error);
+        this.notifierService.notify('error', error.error.message);
+      }
+    );
+  }
+
+  openAddDepartmentDialog(organisation: HROrganisation) {
+    const dialogRef = this.dialog.open(DepartmentAddDialogComponent, {
+      width: '480px',
+      data: organisation
+    });
+
+    dialogRef.afterClosed().subscribe(response => {
+      console.log('The dialog openAddDepartmentDialog was closed');
+      console.log(response);
+      this.ngOnInit();
+    });
   }
 }

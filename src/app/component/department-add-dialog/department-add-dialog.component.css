@@ -1,0 +1,8 @@
+.add-department-dialog-title {
+  margin-top: 0px;
+}
+.add-department-dialog-inputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -7,6 +7,8 @@ export class Vacation {
   vacationType : string;
   userId : number;
   departmentHeadApproval : string;
+  vacationOrder : any;
+  vacationStatement : any;
 
 
   constructor(id : number, dateFrom: string, dateTo: string, message: string, vacationType: string, userId: number, departmentHeadApproval : string) {

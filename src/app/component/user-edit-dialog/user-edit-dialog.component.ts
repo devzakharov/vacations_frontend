@@ -17,9 +17,6 @@ import {DepartmentService} from "../../service/department/department.service";
 })
 export class UserEditDialogComponent implements OnInit {
 
-  organisations : Organisation[] | undefined;
-  departments : Department[] | undefined;
-
   constructor(
     public dialogRef: MatDialogRef<UserEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: HRUser,
@@ -73,7 +70,7 @@ export class UserEditDialogComponent implements OnInit {
   refreshDepartmentsArray(organisation : number, $event : any) {
     console.log($event);
     if ($event != null) this.data.organisationId = $event.value;
-    this.departmentService.getDepartmentsArrayByOrganisationId(organisation);
+    this.departmentService.getDepartmentsArrayByOrganisationId(this.data.organisationId);
   }
 
   setDepartmentValue($event: any) {

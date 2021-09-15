@@ -32,7 +32,7 @@
     <div class="row align-items-center justify-content-end">
       <ul class="col-auto">
 
-        <li (click)="toAllOrganisations()" *ngIf="this.headerService.isAdmin() ||
+        <li (click)="toAbsenceCalendar()" *ngIf="this.headerService.isAdmin() ||
         this.headerService.isPersonnelOfficer()">График отсутствий</li>
 
         <li (click)="toAllOrganisations()" *ngIf="this.headerService.isAdmin() ||

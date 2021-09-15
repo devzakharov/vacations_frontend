@@ -1,0 +1,38 @@
+.table-date-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.table-current-month {
+  margin: 0 10px 0 10px;
+}
+.special-container {
+  max-width: 95%;
+}
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  padding-right: 0;
+}
+.absence-table-header-cell,
+.absence-table-empty-cell {
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+.table-date-container {
+  margin-bottom: 20px;
+}
+.sausage {
+  position: absolute;
+  height: 95%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  top: 1px;
+  left: 0px;
+  background: rgba(0, 0, 0, 0.0);
+  transition: .3s ease;
+}
+.sausage:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+.user-row {
+  position: relative;
+}

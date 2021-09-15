@@ -21,10 +21,6 @@
       <mat-label>Е-мейл</mat-label>
       <input matInput [(ngModel)]="data.email">
     </mat-form-field>
-<!--    <mat-form-field appearance="fill" *ngIf="this.headerService.isAdmin()">-->
-<!--      <mat-label>Организация</mat-label>-->
-<!--      <input matInput [(ngModel)]="data.organisationId">-->
-<!--    </mat-form-field>-->
     <mat-form-field appearance="fill" *ngIf="this.headerService.isAdmin()">
       <mat-label>Организация</mat-label>
       <mat-select (selectionChange)="this.refreshDepartmentsArray(data.organisationId, $event)" name="organisation" [value]="data.organisationId">
@@ -33,10 +29,6 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-<!--    <mat-form-field appearance="fill">-->
-<!--      <mat-label>Отдел (подгружать список отделов)</mat-label>-->
-<!--      <input matInput [(ngModel)]="data.departmentId">-->
-<!--    </mat-form-field>-->
     <mat-form-field appearance="fill">
       <mat-label>Отдел:</mat-label>
       <mat-select (selectionChange)="this.setDepartmentValue($event)" name="department" [value]="data.departmentId">

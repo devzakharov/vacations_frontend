@@ -1,0 +1,73 @@
+<h1 mat-dialog-title class="add-user-dialog-title">Добавление сотрудника</h1>
+<div mat-dialog-content class="add-user-dialog">
+  <div class="add-user-dialog-inputs">
+    <mat-form-field appearance="fill">
+      <mat-label>Фамилия</mat-label>
+      <input matInput [(ngModel)]="user.lastName">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Имя</mat-label>
+      <input matInput [(ngModel)]="user.firstName">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Отчество</mat-label>
+      <input matInput [(ngModel)]="user.middleName">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Должность</mat-label>
+      <input matInput [(ngModel)]="user.position">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Е-мейл</mat-label>
+      <input matInput [(ngModel)]="user.email">
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="this.headerService.isAdmin()">
+      <mat-label>Организация</mat-label>
+      <mat-select
+        (selectionChange)="this.refreshDepartmentsArray(user.organisationId, $event)"
+        name="organisation"
+        [value]="user.organisationId"
+      >
+        <mat-option *ngFor="let organisation of this.organisationService.organisationsArray" [value]="organisation.id">
+          {{organisation.displayName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Отдел:</mat-label>
+      <mat-select (selectionChange)="this.setDepartmentValue($event)" name="department" [value]="">
+        <mat-option *ngFor="let department of this.departmentService.departmentsArray" [value]="department.id">
+          {{department.displayName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="add-user-dialog-checkbox" *ngIf="this.headerService.isAdmin()">
+    <mat-checkbox [checked]="this.hasAdminRole(user)"
+                  (change)="this.toggleAdminRole(user)">
+      Является админом
+    </mat-checkbox>
+  </div>
+  <div class="add-user-dialog-checkbox">
+    <mat-checkbox [checked]="this.hasDepartmentHeadRole(user)"
+                  (change)="this.toggleDepartmentHeadRole(user)">
+      Является главой отдела
+    </mat-checkbox>
+  </div>
+  <div class="add-user-dialog-checkbox">
+    <mat-checkbox [checked]="this.hasAccountantRole(user)"
+                  (change)="this.toggleAccountantRole(user)">
+      Является бухгалтером
+    </mat-checkbox>
+  </div>
+  <div class="add-user-dialog-checkbox">
+    <mat-checkbox [checked]="this.hasPersonnelOfficerRole(user)"
+                  (change)="this.togglePersonnelOfficerRole(user)">
+      Является кадровым сотрудником
+    </mat-checkbox>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Отмена</button>
+  <button mat-button (click)="this.addUser(this.user)" cdkFocusInitial>Сохранить</button>
+</div>
