@@ -23,13 +23,16 @@
 .vacation-item {
   position: relative;
 }
-.vacation-item button {
+.vacation-buttons-container {
   position: absolute;
-  right: -4px;
-  top: -16px;
+  right: 0px;
+  top: -13px;
   z-index: 1;
+}
+.vacation-item button {
   width: 30px;
   height: 30px;
+  margin-left: 3px;
 }
 .vacation-item button > span {
   padding: 0 !important;

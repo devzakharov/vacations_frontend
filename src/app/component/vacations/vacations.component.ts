@@ -14,6 +14,7 @@ import {HeaderService} from "../../service/header/header.service";
 import {UserService} from "../../service/user/user.service";
 import {NotificationService} from "../../service/notification/notification.service";
 import {NotificationToSend} from "../../model/NotificationToSend";
+import {UploadFileDialogComponent} from "../upload-file-dialog/upload-file-dialog.component";
 
 @Component({
   selector: 'app-vacations',
@@ -42,6 +43,7 @@ export class VacationsComponent implements OnInit {
 
       this.getVacationPeriods();
       this.conditionService.refreshDistributedDays();
+      this.conditionService.refreshDistributedWorkingDays();
       this.conditionService.twoWeeksVacationCheck();
       this.conditionService.setConditionsFlag();
 
@@ -94,6 +96,7 @@ export class VacationsComponent implements OnInit {
 
       this.getDeadline();
       this.conditionService.refreshDistributedDays();
+      this.conditionService.refreshDistributedWorkingDays();
     }
   }
 
@@ -260,6 +263,37 @@ export class VacationsComponent implements OnInit {
       this.notifier.notify('warning', 'Вы просрочили крайнюю дату заполнения графика, обратитесь к руководителю отдела!');
     }
   }
+
+  downloadDocxFile(vacation: any) {
+    console.log(vacation);
+    if (vacation != null) {
+
+      let link = btoa(vacation.vacationStatement.statementPath.substring(1));
+
+      this.vacationService.getFile(link).subscribe(response => {
+        let blob = new Blob([response], { type: 'application/octet-stream' });
+        let link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = "document.docx";
+        link.click();
+      }, error => {
+        console.log(error);
+      })
+    }
+  }
+
+  downloadImageFile(vacation: any) {
+
+  }
+
+  uploadFileDialog(vacation: any) {
+    this.dialog.open(UploadFileDialogComponent, {
+      data: {
+        vacation : vacation
+      },
+      width : '300px'
+    });
+  }
 }
 
 export interface DialogData {
@@ -298,6 +332,7 @@ export class AddVacationDialog {
       response => {
         this.vacationService.commonVacations.push(response);
         this.conditionService.refreshDistributedDays();
+        this.conditionService.refreshDistributedWorkingDays();
         this.conditionService.twoWeeksVacationCheck();
         this.conditionService.setConditionsFlag();
       },

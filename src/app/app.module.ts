@@ -38,6 +38,8 @@ import { MatCheckboxModule} from "@angular/material/checkbox";
 import { UserAddDialogComponent } from './component/user-add-dialog/user-add-dialog.component';
 import { DepartmentAddDialogComponent } from './component/department-add-dialog/department-add-dialog.component';
 import { AbsenceCalendarComponent } from './component/absence-calendar/absence-calendar.component';
+import { UploadFileDialogComponent } from './component/upload-file-dialog/upload-file-dialog.component';
+import {MatToolbar, MatToolbarModule} from "@angular/material/toolbar";
 
 
 const appRoutes: Routes = [
@@ -69,6 +71,7 @@ const appRoutes: Routes = [
     UserAddDialogComponent,
     DepartmentAddDialogComponent,
     AbsenceCalendarComponent,
+    UploadFileDialogComponent,
   ],
   imports: [
     MatNativeDateModule,
@@ -92,7 +95,8 @@ const appRoutes: Routes = [
     MatTableModule,
     MatTooltipModule,
     FormsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatToolbarModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'ru'},

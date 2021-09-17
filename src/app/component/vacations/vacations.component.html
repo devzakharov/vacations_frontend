@@ -6,19 +6,32 @@
     <h2>Условия</h2>
     <div class="vacations-checks" [ngClass]="[this.conditionService.conditionsFlag ? 'pass' : 'denied']">
       <p>Распределено календарных дней: {{this.conditionService.distributedDays}} из 28</p>
-      <p>Распределено рабочих дней: {{this.conditionService.distributedDays}} из 20</p>
+      <p>Распределено рабочих дней: {{this.conditionService.distributedWorkingDays}} из 20</p>
       <p>Крайняя дата заполнения: {{this.conditionService.deadline}}</p>
       <p *ngIf="!this.conditionService.twoWeeksInRow">Один из отпусков по длительности не менее 14 дней!</p>
-      <p *ngIf="this.conditionService.conditionsFlag">Вы можете отправить свои отпуска на утверждение руководителю отдела!
+      <p *ngIf="this.conditionService.conditionsFlag && !this.vacationService.blockChanges">Вы можете отправить свои отпуска на утверждение руководителю отдела!
       </p>
     </div>
   </div>
   <div class="row">
     <h2 class="period-header">{{this.vacationPeriods[0]}}</h2>
     <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[0])" class="col-auto vacation-item">
-      <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">
-        <mat-icon (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
-      </button>
+      <div class="vacation-buttons-container">
+        <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null"
+                mat-mini-fab color="disabled" matTooltip="Загрузить скан-копию уведомления">
+          <mat-icon (click)="downloadImageFile(vacation)" class="gray-icon">cloud_download</mat-icon>
+        </button>
+        <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath === null"
+                mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию уведомления">
+          <mat-icon (click)="uploadFileDialog(vacation)" class="gray-icon">cloud_upload</mat-icon>
+        </button>
+        <button *ngIf="vacation.vacationStatement != null" mat-mini-fab color="disabled" matTooltip="Скачать уведомление">
+          <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">description</mat-icon>
+        </button>
+        <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">
+          <mat-icon (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
+        </button>
+      </div>
         <mat-form-field appearance="fill">
           <mat-label>{{vacation.message}}</mat-label>
           <mat-date-range-input [rangePicker]="picker">
@@ -38,9 +51,22 @@
   <div class="row">
     <h2 class="period-header">{{this.vacationPeriods[1]}}</h2>
     <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[1])" class="col-auto vacation-item">
-      <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">
-        <mat-icon  (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
-      </button>
+      <div class="vacation-buttons-container">
+        <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null"
+                mat-mini-fab color="disabled" matTooltip="Загрузить скан-копию уведомления">
+          <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">cloud_download</mat-icon>
+        </button>
+        <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath === null"
+                mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию уведомления">
+          <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">cloud_upload</mat-icon>
+        </button>
+        <button *ngIf="vacation.vacationStatement != null" mat-mini-fab color="disabled" matTooltip="Скачать уведомление">
+          <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">description</mat-icon>
+        </button>
+        <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">
+          <mat-icon (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
+        </button>
+      </div>
       <mat-form-field appearance="fill">
         <mat-label>{{vacation.message}}</mat-label>
         <mat-date-range-input [rangePicker]="picker">

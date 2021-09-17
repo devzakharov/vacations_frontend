@@ -1,0 +1,24 @@
+<h1 mat-dialog-title class="upload-file-dialog-title">Выгрузка скан копии</h1>
+<div mat-dialog-content class="upload-file-dialog">
+  <mat-form-field>
+    <div>
+      <mat-toolbar>
+        <!-- Display files names -->
+        <input matInput [(ngModel)]="fileAttr" readonly name="name" />
+
+        <!-- Browse Button -->
+        <button mat-flat-button color="primary">
+          Обзор
+        </button>
+      </mat-toolbar>
+
+      <!-- Fetch selected filed on change -->
+      <input type="file" #fileInput id="uploadFile" (change)="onFileSelected($event)" name="uploadFile" multiple="multiple"
+             accept="image/*" />
+    </div>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Отмена</button>
+  <button mat-button *ngIf="this.formDataForUpload" (click)="this.saveFile(this.formDataForUpload)" cdkFocusInitial>Отправить</button>
+</div>

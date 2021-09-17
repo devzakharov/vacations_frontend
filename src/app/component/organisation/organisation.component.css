@@ -15,7 +15,7 @@
   background: #fff;
   text-align: left;
 }
-.vacations-table-list div {
+.vacations-table-list .vacation-item {
   display: block;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.12);
@@ -57,13 +57,16 @@ table.vacations-approved {
 .vacation-item {
   position: relative;
 }
-.vacation-item button {
+.vacation-buttons-container {
   position: absolute;
-  right: -8px;
-  top: -13px;
+  right: -9px;
+  top: -14px;
   z-index: 1;
+}
+.vacation-item button {
   width: 30px;
   height: 30px;
+  margin-left: 3px;
 }
 .vacation-item button > span {
   padding: 0 !important;

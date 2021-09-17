@@ -215,4 +215,24 @@ export class OrganisationComponent implements OnInit {
       this.ngOnInit();
     });
   }
+
+  downloadDocxFile(link : string, $event: any) {
+    console.log(link);
+    $event.stopPropagation();
+
+    if (link != null) {
+
+      let encodedLink = btoa(link)
+
+      this.vacationService.getFile(encodedLink).subscribe(response => {
+        let blob = new Blob([response], { type: 'application/octet-stream' });
+        let link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = "document.docx";
+        link.click();
+      }, error => {
+        console.log(error);
+      })
+    }
+  }
 }

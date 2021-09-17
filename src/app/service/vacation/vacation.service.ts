@@ -89,4 +89,21 @@ export class VacationService {
   disapproveUserVacations(user: any) {
     return this.http.post<User>(globals.server + '/api/v1/vacations/department-head-disapproval', user);
   }
+
+  getDistributedWorkingDays() {
+    return this.http.get<number>(globals.server + '/api/v1/vacations/distributed-working-days');
+  }
+
+  getFile(path : string) {
+    return this.http.get<Blob>(globals.server + '/api/v1/files/' + path, {
+      headers: new HttpHeaders({
+        'Accept':'application/docx'
+      }),
+      'responseType': 'blob' as 'json'
+    });
+  }
+
+  saveFile(formData : FormData) {
+    return this.http.post(globals.server + '/api/v1/files', formData);
+  }
 }

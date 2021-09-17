@@ -36,6 +36,20 @@ export class ConditionService {
     });
   }
 
+  refreshDistributedWorkingDays () {
+    this.vacationService.getDistributedWorkingDays().subscribe(response => {
+      console.log(response);
+      if (response == null) {
+        this.distributedWorkingDays = 0;
+      } else {
+        this.distributedWorkingDays = response;
+        this.setConditionsFlag();
+      }
+    }, error => {
+      console.log(error);
+    });
+  }
+
   twoWeeksVacationCheck() {
     this.vacationService.getMaxDaysInARow().subscribe(
       response => {
