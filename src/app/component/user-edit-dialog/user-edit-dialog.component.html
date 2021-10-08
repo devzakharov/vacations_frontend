@@ -22,7 +22,7 @@
       <input matInput [(ngModel)]="data.email">
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="this.headerService.isAdmin()">
-      <mat-label>Организация</mat-label>
+      <mat-label>Основная организация</mat-label>
       <mat-select (selectionChange)="this.refreshDepartmentsArray(data.organisationId, $event)" name="organisation" [value]="data.organisationId">
         <mat-option *ngFor="let organisation of this.organisationService.organisationsArray" [value]="organisation.id">
           {{organisation.displayName}}
@@ -43,6 +43,25 @@
                   (change)="this.toggleDepartmentHeadRole(data)">
       Является главой отдела
     </mat-checkbox>
+  </div>
+  <div *ngIf="this.headerService.isAdmin()">
+    <h3 class="h3-without-margin">Роли:</h3>
+    <mat-chip-list aria-label="roles selection" class="chip-list">
+      <mat-chip *ngFor="let role of data.roles" color="primary" selected (click)="removeRole(role)">{{role.displayName}}</mat-chip>
+      <mat-chip *ngFor="let role of resultRoles" color="primary" (click)="addRole(role)">{{role.displayName}}</mat-chip>
+    </mat-chip-list>
+    <h3 class="h3-without-margin">Обслуживаемые организации:</h3>
+    <div *ngIf="!this.hasAccountantRole(data) && !this.hasPersonnelOfficerRole(data)" class="additional-organisations-notation">
+      (доступны только для ролей: <b>Бухгалтер</b>, <b>Кадровый сотрудник</b>)
+    </div>
+    <div *ngIf="this.hasAccountantRole(data) || this.hasPersonnelOfficerRole(data)" class="additional-organisations-container">
+      <mat-chip-list aria-label="organisations selection" *ngIf="organisationService.currentOrganisation">
+        <ng-container *ngFor="let servicedOrganisation of organisationService.accessibleOrganisations">
+          <mat-chip color="primary" *ngIf="userHasOrganisation(servicedOrganisation)" (click)="removeServicedOrganisation(servicedOrganisation)" selected>{{servicedOrganisation.displayName}}</mat-chip>
+          <mat-chip color="primary" *ngIf="!userHasOrganisation(servicedOrganisation)" (click)="addServicedOrganisation(servicedOrganisation)">{{servicedOrganisation.displayName}}</mat-chip>
+        </ng-container>
+      </mat-chip-list>
+    </div>
   </div>
 </div>
 

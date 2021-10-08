@@ -17,10 +17,9 @@ import {HeaderService} from "../../service/header/header.service";
 })
 export class AccountComponent implements OnInit {
 
-  currentUser : User = new User(0,"", "", "", "", "", "", 0, 0, "", "", [], "");
+  currentUser : User = new User(0,"", "", "", "", "", "", 0, 0, "", "", [], "", []);
   form: FormGroup;
   disableSelect = new FormControl(true);
-
   constructor(
     private authService : AuthService,
     private router : Router,

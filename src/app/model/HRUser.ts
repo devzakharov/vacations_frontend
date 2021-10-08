@@ -1,6 +1,7 @@
 import { Role } from "../type/Role";
 import {User} from "./User";
 import {Vacation} from "./Vacation";
+import {Organisation} from "./Organisation";
 
 export class HRUser extends User {
 
@@ -18,9 +19,10 @@ export class HRUser extends User {
   roles: Role[];
   password: string;
   vacations: Vacation[];
+  servicedOrganisations : Organisation[];
 
-  constructor(id: number, username: string, firstName: string, middleName: string, lastName: string, email: string, position: string, departmentId: number, organisationId: number, status: string, vacationsApproval: string, roles: Role[], password: string, vacations: Vacation[]) {
-    super(id, username, firstName, middleName, lastName, email, position, departmentId, organisationId, status, vacationsApproval, roles, password);
+  constructor(id: number, username: string, firstName: string, middleName: string, lastName: string, email: string, position: string, departmentId: number, organisationId: number, status: string, vacationsApproval: string, roles: Role[], password: string, vacations: Vacation[], servicedOrganisations : Organisation[]) {
+    super(id, username, firstName, middleName, lastName, email, position, departmentId, organisationId, status, vacationsApproval, roles, password, servicedOrganisations);
     this.id = id;
     this.username = username;
     this.firstName = firstName;
@@ -35,6 +37,7 @@ export class HRUser extends User {
     this.roles = roles;
     this.password = password;
     this.vacations = vacations;
+    this.servicedOrganisations = servicedOrganisations;
   }
 
 }

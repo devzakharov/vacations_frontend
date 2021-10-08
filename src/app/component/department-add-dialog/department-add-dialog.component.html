@@ -6,12 +6,21 @@
       <mat-select
         (selectionChange)="changeDepartmentOrganisationId($event.value)"
         name="organisation"
-        [value]="this.headerService.currentUser.organisationId"
+        [value]="this.data.id"
       >
         <mat-option *ngFor="let organisation of this.organisationService.organisationsArray" [value]="organisation.id">
           {{organisation.displayName}}
         </mat-option>
       </mat-select>
+<!--      <mat-select-->
+<!--        (selectionChange)="changeDepartmentOrganisationId($event.value)"-->
+<!--        name="organisation"-->
+<!--        [value]="this.headerService.currentUser.organisationId"-->
+<!--      >-->
+<!--        <mat-option *ngFor="let organisation of this.organisationService.organisationsArray" [value]="organisation.id">-->
+<!--          {{organisation.displayName}}-->
+<!--        </mat-option>-->
+<!--      </mat-select>-->
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Название отдела</mat-label>

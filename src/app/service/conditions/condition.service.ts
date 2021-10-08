@@ -38,7 +38,7 @@ export class ConditionService {
 
   refreshDistributedWorkingDays () {
     this.vacationService.getDistributedWorkingDays().subscribe(response => {
-      console.log(response);
+      // console.log(response);
       if (response == null) {
         this.distributedWorkingDays = 0;
       } else {

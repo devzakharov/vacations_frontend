@@ -14,7 +14,7 @@ import {DepartmentService} from "../../service/department/department.service";
 })
 export class DepartmentAddDialogComponent implements OnInit {
 
-  department : any = {organisationId : this.headerService.currentUser.organisationId, displayName : ''}
+  department : any = {organisationId : this.data.id, displayName : ''}
 
   constructor(
     public dialogRef: MatDialogRef<DepartmentAddDialogComponent>,

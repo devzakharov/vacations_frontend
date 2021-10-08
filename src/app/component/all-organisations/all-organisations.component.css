@@ -1,0 +1,43 @@
+.organisation-departments-list li {
+  list-style-type: none;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.organisation-departments-list {
+  margin-bottom: 13px;
+}
+.delete-department-button {
+  margin-right: 8px;
+}
+.organisation-buttons-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.delete-organisation-button {
+  margin-right: 13px;
+}
+.buttons-container {
+  display: flex; justify-content: flex-start; align-items: center;
+}
+.all-organisations-container li button,
+.all-organisations-container .add-department-button{
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .organisation-departments-list li .mat-icon,
+::ng-deep .organisation-departments-list .add-department-button .mat-icon{
+  height:20px !important;
+  width:20px !important;
+  font-size:20px !important;
+}
+::ng-deep .organisation-departments-list li .mat-button-wrapper,
+::ng-deep .organisation-departments-list .add-department-button .mat-button-wrapper{
+ padding: 0;
+}

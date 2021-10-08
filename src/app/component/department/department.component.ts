@@ -43,18 +43,13 @@ export class DepartmentComponent implements OnInit {
 
   fillUserArray(departmentId : number) {
 
-    console.log(this.headerService.currentUser.departmentId);
-
     ELEMENT_DATA.length = 0;
 
     this.departmentService.getUserListByDepartmentId(departmentId).subscribe(
       response => {
-        console.log(response);
         response.forEach(user => {
-          console.log(user);
           ELEMENT_DATA.push(user);
         });
-        console.log(this.dataSource);
         this.table.renderRows();
       }, error => {
         console.log(error);

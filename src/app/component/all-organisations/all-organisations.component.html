@@ -1,8 +1,36 @@
-<div class="container">
+<div class="container all-organisations-container">
   <div class="row">
     <h1>Организации</h1>
   </div>
   <div class="row">
+    <div class="buttons-container">
+      <button matTooltip="Добавить организацию" *ngIf="this.headerService.isAdmin()" mat-raised-button color="primary"
+              (click)="this.openAddOrganisationDialog(organisationToAdd)">
+        <mat-icon>add</mat-icon><span> Добавить организацию</span>
+      </button>
+    </div>
+    <ng-container *ngIf="this.organisationsArr.length > 0">
+      <ng-container  *ngFor="let organisation of this.organisationsArr">
+        <ul class="organisation-departments-list">
+          <div class="organisation-buttons-container">
+            <button mat-mini-fab color="disabled" class="gray-icon delete-organisation-button" aria-label="delete organisation" (click)="deleteOrganisation(organisation)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <h2>{{organisation.displayName}}</h2>
+          </div>
+          <li *ngFor="let department of organisation.departments">
+            <button mat-mini-fab color="disabled" class="gray-icon delete-department-button" aria-label="delete department" (click)="deleteDepartment(department)">
+              <mat-icon>delete</mat-icon>
+            </button>
 
+            {{department.displayName}}</li>
+          <button mat-mini-fab color="disabled" class="gray-icon add-department-button" aria-label="add department"(click)="this.openAddDepartmentDialog(organisation)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </ul>
+
+        <mat-divider></mat-divider>
+      </ng-container>
+    </ng-container>
   </div>
 </div>

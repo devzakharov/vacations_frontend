@@ -11,7 +11,7 @@ import {AuthService} from "../auth/auth.service";
 export class HeaderService {
 
   displayHeader = false;
-  currentUser : User = new User(0,"", "", "", "", "", "", 0, 0, "", "", [], "");
+  currentUser : User = new User(0,"", "", "", "", "", "", 0, 0, "", "", [], "", []);
   currentUserRoles : string[] = [];
 
   constructor(private userService : UserService,

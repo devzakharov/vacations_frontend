@@ -33,7 +33,7 @@ export class DepartmentService {
     return this.http.get<Department[]>( globals.server + '/api/v1/departments/all-by-organisation?organisation=' + id).subscribe(
       response => {
         this.departmentsArray = response;
-        console.log(response, id);
+        // console.log(response, id);
       }, error => {
         console.log(error);
       }

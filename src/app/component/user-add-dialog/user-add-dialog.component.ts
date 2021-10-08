@@ -32,6 +32,7 @@ export class UserAddDialogComponent implements OnInit {
     'NOT_APPROVED',
     [{id: 1, name: "ROLE_USER", displayName: "Сотрудник"}],
     '',
+    [],
     []);
 
   constructor(
@@ -141,5 +142,25 @@ export class UserAddDialogComponent implements OnInit {
       let role : Role = {id: 6, name: "ROLE_PERSONNEL_OFFICER", displayName: "Кадровик"}
       user.roles.push(role);
     }
+  }
+
+  removeServicedOrganisation(servicedOrganisation: Organisation) {
+    let index = this.user.servicedOrganisations.findIndex(role => role.id === servicedOrganisation.id);
+    this.user.servicedOrganisations.splice(index, 1);
+    this.ngOnInit();
+  }
+
+  addServicedOrganisation(servicedOrganisation: Organisation) {
+    if (this.user.servicedOrganisations.find(o => o.id === servicedOrganisation.id)) {
+      return;
+    } else {
+      this.user.servicedOrganisations.push(servicedOrganisation);
+    }
+    console.log(this.user.servicedOrganisations)
+    this.ngOnInit();
+  }
+
+  userHasOrganisation(servicedOrganisation: Organisation) {
+    return this.user.servicedOrganisations.find(o => o.id === servicedOrganisation.id);
   }
 }

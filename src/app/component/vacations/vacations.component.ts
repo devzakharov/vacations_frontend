@@ -49,13 +49,10 @@ export class VacationsComponent implements OnInit {
 
       this.vacationService.getAllCommonVacations().subscribe(
         (response) => {
-          console.log(response);
           this.vacationService.commonVacations = [];
-          console.log(this.vacationService.commonVacations)
           response.forEach(vacation => {
             this.vacationService.commonVacations.push(vacation);
           });
-          console.log(this.vacationService.commonVacations)
         }, error => {
           console.log(error);
           this.notifier.notify('error', error.error.error + " " + error.error.message);
@@ -243,11 +240,11 @@ export class VacationsComponent implements OnInit {
       if (moment().diff(moment(response, 'YYYY-MM-DD'), 'days') < 0) {
         this.vacationService.blockChanges = false;
       } else {
-        console.log(response);
-        console.log(moment(response, 'YYYY-MM-DD'));
-        console.log(moment().diff(moment(response, 'YYYY-MM-DD'), 'days') < 0);
-        console.log(moment().diff(moment(response, 'YYYY-MM-DD'), 'days'));
-        console.log(moment());
+        // console.log(response);
+        // console.log(moment(response, 'YYYY-MM-DD'));
+        // console.log(moment().diff(moment(response, 'YYYY-MM-DD'), 'days') < 0);
+        // console.log(moment().diff(moment(response, 'YYYY-MM-DD'), 'days'));
+        // console.log(moment());
         this.notifier.notify('warning', 'Вы просрочили крайнюю дату заполнения графика, обратитесь к руководителю отдела!');
       }
     }, error => {
@@ -274,7 +271,7 @@ export class VacationsComponent implements OnInit {
         let blob = new Blob([response], { type: 'application/octet-stream' });
         let link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = "document.docx";
+        link.download = "statement.docx";
         link.click();
       }, error => {
         console.log(error);
@@ -283,15 +280,54 @@ export class VacationsComponent implements OnInit {
   }
 
   downloadImageFile(vacation: any) {
+    console.log(vacation);
+    if (vacation != null) {
 
+      let link = btoa(vacation.vacationStatement.signedStatementPath.substring(1));
+
+      this.vacationService.getFile(link).subscribe(response => {
+        let blob = new Blob([response], { type: 'application/octet-stream' });
+
+        // let link = document.createElement('a');
+        // link.href = URL.createObjectURL(blob);
+        // link.download = "scan.jpg";
+        // link.target = "_blank"
+        // link.click();
+        // console.log(link);
+
+        let reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function() {
+          let base64data = reader.result;
+          // console.log(base64data);
+
+          let image = new Image();
+          if (typeof base64data === "string") {
+            image.src = base64data;
+          }
+          // image.src = "data:image/jpg;base64," + base64data;
+
+          let w = window.open("");
+          // @ts-ignore
+          w.document.write(image.outerHTML);
+        }
+      }, error => {
+        console.log(error);
+      })
+    }
   }
 
   uploadFileDialog(vacation: any) {
-    this.dialog.open(UploadFileDialogComponent, {
+    const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       data: {
-        vacation : vacation
+        vacation : vacation,
+        fileType : 'statement'
       },
       width : '300px'
+    });
+
+    dialogRef.afterClosed().subscribe(response => {
+      this.ngOnInit();
     });
   }
 }
@@ -317,7 +353,11 @@ export class AddVacationDialog {
     });
   }
 
-  startDate = new Date();
+  nowDate = new Date();
+  y = this.nowDate.getFullYear();
+  m = this.nowDate.getMonth();
+  d = this.nowDate.getDate();
+  startDate = new Date(this.y + 1, this.m, this.d);
   addVacationForm: FormGroup;
   vacationForSave : Vacation = new Vacation(0, '', '', '', 'COMMON', 0, 'NOT_APPROVED');
 

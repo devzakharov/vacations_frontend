@@ -40,6 +40,8 @@ import { DepartmentAddDialogComponent } from './component/department-add-dialog/
 import { AbsenceCalendarComponent } from './component/absence-calendar/absence-calendar.component';
 import { UploadFileDialogComponent } from './component/upload-file-dialog/upload-file-dialog.component';
 import {MatToolbar, MatToolbarModule} from "@angular/material/toolbar";
+import { OrganisationAddDialogComponent } from './component/organisation-add-dialog/organisation-add-dialog.component';
+import {MatChipsModule} from "@angular/material/chips";
 
 
 const appRoutes: Routes = [
@@ -72,6 +74,7 @@ const appRoutes: Routes = [
     DepartmentAddDialogComponent,
     AbsenceCalendarComponent,
     UploadFileDialogComponent,
+    OrganisationAddDialogComponent,
   ],
   imports: [
     MatNativeDateModule,
@@ -96,7 +99,8 @@ const appRoutes: Routes = [
     MatTooltipModule,
     FormsModule,
     MatCheckboxModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatChipsModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'ru'},

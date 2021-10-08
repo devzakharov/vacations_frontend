@@ -17,9 +17,11 @@ import {NotificationToSend} from "../../model/NotificationToSend";
 import {NotificationService} from "../../service/notification/notification.service";
 import {UserAddDialogComponent} from "../user-add-dialog/user-add-dialog.component";
 import {DepartmentService} from "../../service/department/department.service";
-import {readSpanComment} from "@angular/compiler-cli/src/ngtsc/typecheck/src/comments";
 import {NotifierService} from "angular-notifier";
 import {DepartmentAddDialogComponent} from "../department-add-dialog/department-add-dialog.component";
+import {UploadFileDialogComponent} from "../upload-file-dialog/upload-file-dialog.component";
+import {OrganisationAddDialogComponent} from "../organisation-add-dialog/organisation-add-dialog.component";
+import {Organisation} from "../../model/Organisation";
 
 const ELEMENT_DATA: HRDepartment[] = [];
 
@@ -39,12 +41,12 @@ export class OrganisationComponent implements OnInit {
 
   displayedColumns: string[] = ['user-name', 'user-position', 'user-vacations'];
   dataSource = ELEMENT_DATA;
-  organisation : HROrganisation | undefined;
-
+  // organisation : HROrganisation | undefined;
   expandedElement: HRUser | null | undefined;
+  // accessibleOrganisations : Organisation[] = [];
 
   constructor(public organisationService : OrganisationService,
-              private headerService : HeaderService,
+              public headerService : HeaderService,
               private userService : UserService,
               public vacationService : VacationService,
               public dialog : MatDialog,
@@ -53,7 +55,14 @@ export class OrganisationComponent implements OnInit {
               private notifierService : NotifierService) { }
 
   ngOnInit(): void {
-    this.getDataForComponent();
+
+    this.getAccessibleOrganisations();
+
+    if (this.organisationService.currentOrganisation === undefined) {
+      this.getDataForComponent();
+    } else {
+      this.refreshOrganisation();
+    }
   }
 
   // @ts-ignore
@@ -62,22 +71,51 @@ export class OrganisationComponent implements OnInit {
   getDataForComponent() {
     this.userService.getUser().subscribe(
       response => {
-        this.organisationService.getUsersGroupingByDepartments(response.organisationId).subscribe(response => {
-          console.log(response);
-          ELEMENT_DATA.length = 0;
-          this.organisation = response;
-          response.departments.forEach(department => {
-            // console.log(department);
+        this.organisationService.getUsersGroupingByDepartments(response.organisationId).subscribe(
+          response => {
+            this.getAccessibleOrganisations();
+            ELEMENT_DATA.length = 0;
+            this.organisationService.currentOrganisation = response;
+            this.organisationService.currentOrganisation.departments.forEach(department => {
             ELEMENT_DATA.push(department);
           });
-          // console.log(this.dataSource);
+          if (this.table) this.table.renderRows();
         }, error => {
           console.log(error);
         });
+
       }, error => {
         console.log(error);
       }
     );
+  }
+
+  refreshOrganisation() {
+    if (this.organisationService.currentOrganisation) {
+      this.organisationService.getUsersGroupingByDepartments(this.organisationService.currentOrganisation.id).subscribe(
+        response => {
+          this.getAccessibleOrganisations();
+          ELEMENT_DATA.length = 0;
+          this.organisationService.currentOrganisation = response;
+          this.organisationService.currentOrganisation.departments.forEach(department => {
+          ELEMENT_DATA.push(department);
+        });
+        if (this.table) this.table.renderRows();
+      }, error => {
+        console.log(error);
+      });
+    }
+
+  }
+
+  getAccessibleOrganisations() {
+    if (this.headerService.isAdmin()) {
+      this.organisationService.getOrganisationArray().subscribe(response => {
+        this.organisationService.accessibleOrganisations = response;
+      });
+    } else {
+      this.organisationService.accessibleOrganisations = this.headerService.currentUser.servicedOrganisations;
+    }
   }
 
 
@@ -99,8 +137,7 @@ export class OrganisationComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog (openUserEditDialog) was closed');
-      this.getDataForComponent();
+      this.ngOnInit();
     });
   }
 
@@ -112,7 +149,6 @@ export class OrganisationComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog (openUserAddLeaveDialog) was closed');
       console.log(result);
     });
   }
@@ -127,9 +163,6 @@ export class OrganisationComponent implements OnInit {
   }
 
   isAllCommonVacationsApproved(department : HRDepartment) : boolean {
-
-    // console.log(department);
-
     return !(department.users || []).some(
       user => (user.vacations || []).some(
         vacation => vacation.vacationType === 'COMMON' && vacation.departmentHeadApproval !== 'APPROVED'));
@@ -178,8 +211,6 @@ export class OrganisationComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(response => {
-      console.log('The dialog openAddUserDialog was closed');
-      console.log(response);
       this.ngOnInit();
     });
   }
@@ -216,23 +247,96 @@ export class OrganisationComponent implements OnInit {
     });
   }
 
-  downloadDocxFile(link : string, $event: any) {
-    console.log(link);
+  downloadDocxFile(vacation : any, $event: any) {
     $event.stopPropagation();
 
-    if (link != null) {
+    if (vacation != null) {
 
-      let encodedLink = btoa(link)
+      let link = btoa(vacation.vacationOrder.orderPath.substring(1));
 
-      this.vacationService.getFile(encodedLink).subscribe(response => {
+      this.vacationService.getFile(link).subscribe(response => {
         let blob = new Blob([response], { type: 'application/octet-stream' });
         let link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = "document.docx";
+        link.download = "order.docx";
         link.click();
       }, error => {
         console.log(error);
       })
     }
   }
+
+  downloadImageFile(vacation: any, $event : any, fileType : string) {
+    $event.stopPropagation()
+    if (vacation != null) {
+
+      let link = '';
+
+      if (fileType === 'order') {
+        link = btoa(vacation.vacationOrder.signedOrderPath.substring(1));
+      } else if (fileType === 'statement') {
+         link = btoa(vacation.vacationStatement.signedStatementPath.substring(1));
+      }
+
+      this.vacationService.getFile(link).subscribe(response => {
+
+        let blob = new Blob([response], { type: 'application/octet-stream' });
+
+        let reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function() {
+          let base64data = reader.result;
+          // console.log(base64data);
+
+          let image = new Image();
+          if (typeof base64data === "string") {
+            image.src = base64data;
+          }
+          // image.src = "data:image/jpg;base64," + base64data;
+
+          let w = window.open("");
+          // @ts-ignore
+          w.document.write(image.outerHTML);
+        }
+      }, error => {
+        console.log(error);
+      })
+    }
+  }
+
+  uploadFileDialog(vacation: any) {
+    const dialogRef = this.dialog.open(UploadFileDialogComponent, {
+      data: {
+        vacation : vacation,
+        fileType : 'order'
+      },
+      width : '300px'
+    });
+
+    dialogRef.afterClosed().subscribe(response => {
+      this.ngOnInit();
+    });
+  }
+
+  openAddOrganisationDialog(organisation: HROrganisation) {
+    const dialogRef = this.dialog.open(OrganisationAddDialogComponent, {
+      data: {
+        organisation : organisation,
+      },
+      width : '480px'
+    });
+
+    dialogRef.afterClosed().subscribe(response => {
+      this.ngOnInit();
+    });
+  }
+
+  switchOrganisation(servicedOrganisation: Organisation) {
+    this.organisationService.getHROrganisation(servicedOrganisation.id).subscribe(response => {
+      this.organisationService.currentOrganisation = response;
+    }, error => {
+      this.notifierService.notify('error', error.error.message);
+    });
+  }
+
 }

@@ -1,19 +1,31 @@
 <div class="container">
   <div class="row">
-    <ng-container *ngIf="organisation !== undefined">
-      <h1>Организация ({{organisation.displayName}} ИНН:{{organisation.inn}})</h1>
+    <ng-container *ngIf="this.headerService.currentUser.servicedOrganisations.length > 0 || this.headerService.isAdmin()">
+      <h1>Доступные организации: </h1>
+      <mat-chip-list aria-label="organisations selection" *ngIf="organisationService.currentOrganisation">
+        <ng-container *ngFor="let servicedOrganisation of organisationService.accessibleOrganisations">
+          <mat-chip *ngIf="organisationService.currentOrganisation.id === servicedOrganisation.id" color="primary" selected>{{servicedOrganisation.displayName}}</mat-chip>
+          <mat-chip *ngIf="organisationService.currentOrganisation.id != servicedOrganisation.id" color="primary" (click)="switchOrganisation(servicedOrganisation)">{{servicedOrganisation.displayName}}</mat-chip>
+        </ng-container>
+      </mat-chip-list>
+    </ng-container>
+    <ng-container *ngIf="organisationService.currentOrganisation !== undefined">
+      <h1>Организация ({{organisationService.currentOrganisation.displayName}} ИНН:{{organisationService.currentOrganisation.inn}})</h1>
       <div class="buttons-container">
-        <button matTooltip="Добавить нового сотрудника" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.openAddUserDialog(organisation)">
+        <button matTooltip="Добавить нового сотрудника" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.openAddUserDialog(organisationService.currentOrganisation)">
           <mat-icon>add</mat-icon><span> Добавить нового сотрудника</span>
         </button>
-        <button matTooltip="Добавить отдел" mat-raised-button color="primary" (click)="this.openAddDepartmentDialog(organisation)">
+        <button matTooltip="Добавить отдел" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.openAddDepartmentDialog(organisationService.currentOrganisation)">
           <mat-icon>add</mat-icon><span> Добавить отдел</span>
+        </button>
+        <button matTooltip="Добавить организацию" *ngIf="this.headerService.isAdmin()" mat-raised-button color="primary" (click)="this.openAddOrganisationDialog(organisationService.currentOrganisation)">
+          <mat-icon>add</mat-icon><span> Добавить организацию</span>
         </button>
       </div>
     </ng-container>
-    <ng-container *ngIf="organisation !== undefined" >
+    <ng-container *ngIf="organisationService.currentOrganisation !== undefined" >
 
-      <ng-container *ngFor="let department of organisation.departments">
+      <ng-container *ngFor="let department of organisationService.currentOrganisation.departments">
 
         <div class="button-and-header-container">
           <button mat-mini-fab color="disabled" matTooltip="Удалить отдел" aria-label="Удалить отдел"(click)="this.deleteDepartment(department)">
@@ -54,8 +66,20 @@
                     <ng-container *ngIf="vacation.vacationType === 'COMMON'">
                       <div class="vacation-item">
                         <div class="vacation-buttons-container">
-                          <button (click)="downloadDocxFile(vacation.vacationStatement.signedStatement.substring(1), $event)" *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null" mat-mini-fab color="disabled" matTooltip="Открыть скан-копию уведомления">
-                            <mat-icon  class="gray-icon">description</mat-icon>
+                          <button (click)="downloadImageFile(vacation, $event, 'order')" *ngIf="vacation.vacationOrder != null && vacation.vacationOrder.signedOrderPath != null"
+                                  mat-mini-fab color="disabled" matTooltip="Показать скан-копию приказа">
+                            <mat-icon  class="gray-icon">crop_original</mat-icon>
+                          </button>
+                          <button (click)="downloadImageFile(vacation, $event, 'statement')" *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null"
+                                  mat-mini-fab color="disabled" matTooltip="Показать скан-копию уведомления">
+                            <mat-icon  class="gray-icon">crop_original</mat-icon>
+                          </button>
+                          <button *ngIf="vacation.vacationOrder != null && vacation.vacationOrder.signedOrderPath === null"
+                                  mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию уведомления">
+                            <mat-icon (click)="uploadFileDialog(vacation)" class="gray-icon">cloud_upload</mat-icon>
+                          </button>
+                          <button *ngIf="vacation.vacationOrder != null" mat-mini-fab color="disabled" matTooltip="Скачать приказ в формате .docx">
+                            <mat-icon (click)="downloadDocxFile(vacation, $event)" class="gray-icon">description</mat-icon>
                           </button>
                         </div>
                         {{ this.vacationService.vacationTypeToEmoji(vacation) }}

@@ -9,3 +9,7 @@
 .mat-dialog-content {
   overflow: unset;
 }
+.additional-organisations-notation,
+.additional-organisations-container {
+  margin-bottom: 13px;
+}

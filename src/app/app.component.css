@@ -53,3 +53,10 @@ h2 {
 .hoverable:hover {
   background: #dbdbdb;
 }
+.h3-without-margin {
+  margin: 0 !important;
+}
+.chip-list {
+  margin-bottom: 8px;
+  display: block;
+}

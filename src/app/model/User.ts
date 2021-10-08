@@ -1,4 +1,6 @@
 import {Role} from "../type/Role";
+import {HROrganisation} from "./HROrganisation";
+import {Organisation} from "./Organisation";
 
 export class User {
   id : number;
@@ -14,6 +16,7 @@ export class User {
   vacationsApproval : string;
   roles : Role[];
   password : string;
+  servicedOrganisations : Organisation[];
 
   constructor(
     id : number,
@@ -28,7 +31,8 @@ export class User {
     status: string,
     vacationsApproval: string,
     roles: Role[],
-    password : string
+    password : string,
+    servicedOrganisations : Organisation[]
   ) {
     this.id = id;
     this.username = username;
@@ -43,5 +47,6 @@ export class User {
     this.vacationsApproval = vacationsApproval;
     this.roles = roles;
     this.password = password;
+    this.servicedOrganisations = servicedOrganisations;
   }
 }

@@ -21,16 +21,23 @@
       <mat-label>Е-мейл</mat-label>
       <input matInput [(ngModel)]="user.email">
     </mat-form-field>
-    <mat-form-field appearance="fill" *ngIf="this.headerService.isAdmin()">
-      <mat-label>Организация</mat-label>
+    <mat-form-field appearance="fill" *ngIf="this.headerService.isAdmin() || this.headerService.currentUser.servicedOrganisations.length > 0">
+      <mat-label>Основная организация</mat-label>
       <mat-select
         (selectionChange)="this.refreshDepartmentsArray(user.organisationId, $event)"
         name="organisation"
         [value]="user.organisationId"
       >
-        <mat-option *ngFor="let organisation of this.organisationService.organisationsArray" [value]="organisation.id">
-          {{organisation.displayName}}
-        </mat-option>
+        <ng-container *ngIf="this.headerService.isAdmin()">
+          <mat-option *ngFor="let organisation of this.organisationService.organisationsArray" [value]="organisation.id">
+            {{organisation.displayName}}
+          </mat-option>
+        </ng-container>
+        <ng-container *ngIf="!this.headerService.isAdmin() && this.headerService.currentUser.servicedOrganisations.length > 0">
+          <mat-option *ngFor="let organisation of this.headerService.currentUser.servicedOrganisations" [value]="organisation.id">
+            {{organisation.displayName}}
+          </mat-option>
+        </ng-container>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -65,6 +72,20 @@
                   (change)="this.togglePersonnelOfficerRole(user)">
       Является кадровым сотрудником
     </mat-checkbox>
+  </div>
+  <div *ngIf="this.headerService.isAdmin()">
+    <h3 class="h3-without-margin">Обслуживаемые организации:</h3>
+    <div *ngIf="!this.hasAccountantRole(user) && !this.hasPersonnelOfficerRole(user)" class="additional-organisations-notation">
+      (доступны только для ролей: <b>Бухгалтер</b>, <b>Кадровый сотрудник</b>)
+    </div>
+    <div *ngIf="this.hasAccountantRole(user) || this.hasPersonnelOfficerRole(user)" class="additional-organisations-container">
+      <mat-chip-list aria-label="organisations selection" *ngIf="organisationService.currentOrganisation">
+        <ng-container *ngFor="let servicedOrganisation of organisationService.accessibleOrganisations">
+          <mat-chip color="primary" *ngIf="userHasOrganisation(servicedOrganisation)" (click)="removeServicedOrganisation(servicedOrganisation)" selected>{{servicedOrganisation.displayName}}</mat-chip>
+          <mat-chip color="primary" *ngIf="!userHasOrganisation(servicedOrganisation)" (click)="addServicedOrganisation(servicedOrganisation)">{{servicedOrganisation.displayName}}</mat-chip>
+        </ng-container>
+      </mat-chip-list>
+    </div>
   </div>
 </div>
 <div mat-dialog-actions>

@@ -1,0 +1,11 @@
+.add-organisation-dialog-inputs {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.add-organisation-dialog-title {
+  margin-top: 0 !important;
+}
+.mat-dialog-content {
+  overflow: unset;
+}

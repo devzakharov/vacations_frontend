@@ -1,0 +1,22 @@
+<h1 mat-dialog-title class="add-organisation-dialog-title">Добавление организации</h1>
+<div mat-dialog-content class="add-organisation-dialog">
+  <div class="add-organisation-dialog-inputs">
+    <mat-form-field appearance="fill">
+      <mat-label>ИНН</mat-label>
+      <input matInput [(ngModel)]="organisation.inn">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Название организации</mat-label>
+      <input matInput [(ngModel)]="organisation.displayName">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Тег организации</mat-label>
+      <input matInput [(ngModel)]="organisation.name">
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Отмена</button>
+  <button mat-button (click)="this.addOrganisation(this.organisation)" cdkFocusInitial>Сохранить</button>
+</div>
+

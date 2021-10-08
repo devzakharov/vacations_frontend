@@ -9,6 +9,7 @@ import {Organisation} from "../../model/Organisation";
 import {Department} from "../../model/Department";
 import {OrganisationService} from "../../service/organisation/organisation.service";
 import {DepartmentService} from "../../service/department/department.service";
+import {RoleService} from "../../service/role/role.service";
 
 @Component({
   selector: 'app-user-edit-dialog',
@@ -17,6 +18,7 @@ import {DepartmentService} from "../../service/department/department.service";
 })
 export class UserEditDialogComponent implements OnInit {
 
+
   constructor(
     public dialogRef: MatDialogRef<UserEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: HRUser,
@@ -24,15 +26,22 @@ export class UserEditDialogComponent implements OnInit {
     private notifierService : NotifierService,
     public headerService : HeaderService,
     public organisationService : OrganisationService,
-    public departmentService : DepartmentService) {}
+    public departmentService : DepartmentService,
+    private roleService: RoleService) {}
+
+  resultRoles: Role[] = [];
+  resultServicedOrganisations : Organisation[] = [];
 
   onNoClick(): void {
+    console.log(this.data);
     this.dialogRef.close();
   }
 
   ngOnInit(): void {
     this.organisationService.setOrganisationArray();
     this.refreshDepartmentsArray(this.data.organisationId, null);
+    this.excludeExistingUserRoles(this.data.roles);
+    // this.excludeExistingUserServicedOrganisations(this.data.servicedOrganisations);
   }
 
   hasDepartmentHeadRole(user : HRUser) : boolean {
@@ -76,4 +85,71 @@ export class UserEditDialogComponent implements OnInit {
   setDepartmentValue($event: any) {
     this.data.departmentId = $event.value;
   }
+
+  hasAccountantRole(user: HRUser) {
+    return user.roles.some(role => {
+      return role.name === 'ROLE_ACCOUNTANT'
+    });
+  }
+
+  hasPersonnelOfficerRole(user: HRUser) {
+    return user.roles.some(role => {
+      return role.name === 'ROLE_PERSONNEL_OFFICER'
+    });
+  }
+
+  excludeExistingUserRoles(roles : Role[]) {
+
+    let map = new Map(roles.map(i => [i.id, i]));
+
+    this.roleService.getAllRoles().subscribe(response => {
+      this.resultRoles = response.filter(item => !map.has(item.id));
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  excludeExistingUserServicedOrganisations(organisations : Organisation[]) {
+
+    let map = new Map(organisations.map(i => [i.id, i]));
+
+    this.organisationService.getOrganisationArray().subscribe(response => {
+      this.resultServicedOrganisations = response.filter(item => !map.has(item.id));
+      // this.excludeMainOrganisation(this.data.organisationId);
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  excludeMainOrganisation(id : number) {
+    let index = this.resultServicedOrganisations.findIndex(organisation => organisation.id === id);
+    this.resultServicedOrganisations.splice(index, 1);
+  }
+
+  removeRole(removedRole: Role) {
+    let index = this.data.roles.findIndex(role => role.id === removedRole.id);
+    this.data.roles.splice(index, 1);
+    this.ngOnInit();
+  }
+
+  addRole(addedRole: Role) {
+    this.data.roles.push(addedRole);
+    this.ngOnInit();
+  }
+
+  removeServicedOrganisation(servicedOrganisation: Organisation) {
+    let index = this.data.servicedOrganisations.findIndex(role => role.id === servicedOrganisation.id);
+    this.data.servicedOrganisations.splice(index, 1);
+    this.ngOnInit();
+  }
+
+  addServicedOrganisation(servicedOrganisation: Organisation) {
+    this.data.servicedOrganisations.push(servicedOrganisation);
+    this.ngOnInit();
+  }
+
+  userHasOrganisation(servicedOrganisation: Organisation) {
+    return this.data.servicedOrganisations.find(o => o.id === servicedOrganisation.id);
+  }
+
 }

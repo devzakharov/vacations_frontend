@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import * as globals from "../../globals";
 import {Organisation} from "../../model/Organisation";
 import {DepartmentService} from "../department/department.service";
-import {Department} from "../../model/Department";
-import {HRDepartment} from "../../model/HRDepartment";
 import {HROrganisation} from "../../model/HROrganisation";
 import {User} from "../../model/User";
 import {Role} from "../../model/Role";
@@ -20,6 +18,9 @@ export class OrganisationService {
   }
 
   organisationsArray : Organisation[] = [];
+
+  currentOrganisation : HROrganisation | undefined;
+  accessibleOrganisations : Organisation[] = [];
 
   getOrganisationArray() {
     return this.http.get<Organisation[]>( globals.server + '/api/v1/organisations/all');
@@ -42,5 +43,29 @@ export class OrganisationService {
     return user.roles.some(role => {
       return role.displayName === Role.ROLE_DEPARTMENT_HEAD;
     });
+  }
+
+  addOrganisation(organisation : HROrganisation) {
+    return this.http.post(globals.server + '/api/v1/organisations/add', organisation);
+  }
+
+  getHROrganisationArray() {
+    return this.http.get<HROrganisation[]>( globals.server + '/api/v1/organisations/hr-all');
+  }
+
+  deleteOrganisation(organisation: HROrganisation) {
+
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: organisation
+    };
+
+    return this.http.delete<HROrganisation>(globals.server + '/api/v1/organisations/delete', options);
+  }
+
+  getHROrganisation(id: number) {
+    return this.http.get<HROrganisation>(globals.server + '/api/v1/organisations/organisation?id=' + id);
   }
 }
