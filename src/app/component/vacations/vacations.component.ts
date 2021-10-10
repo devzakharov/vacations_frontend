@@ -47,6 +47,23 @@ export class VacationsComponent implements OnInit {
       this.conditionService.twoWeeksVacationCheck();
       this.conditionService.setConditionsFlag();
 
+      this.vacationService.getAllCommonVacationsForCurrentPeriod().subscribe(
+        (response) => {
+          this.vacationService.currentPeriodVacations = [];
+          response.forEach(vacation => {
+            this.vacationService.currentPeriodVacations.push(vacation);
+          });
+        }, error => {
+          console.log(error);
+          this.notifier.notify('error', error.error.error + " " + error.error.message);
+          if (error.error == "Token is expired!") {
+            this.notifier.notify('error', 'Время действия сессии истекло, войдите заново!');
+            this.authService.logout();
+            this.router.navigateByUrl('/login');
+          }
+        }
+      );
+
       this.vacationService.getAllCommonVacations().subscribe(
         (response) => {
           this.vacationService.commonVacations = [];

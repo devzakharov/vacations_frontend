@@ -15,6 +15,7 @@ export class VacationService {
 
   public commonVacations : Vacation[] = [];
   public uncommonVacations : Vacation[] = [];
+  public currentPeriodVacations : Vacation[] = [];
 
   blockChanges = false;
 
@@ -26,6 +27,10 @@ export class VacationService {
 
   getAllUncommonVacations() {
     return this.http.get<Vacation[]>(globals.server + '/api/v1/vacations/uncommon');
+  }
+
+  getAllCommonVacationsForCurrentPeriod() {
+    return this.http.get<Vacation[]>(globals.server + '/api/v1/vacations/common/current-period')
   }
 
   removeVacation(vacation : Vacation) {

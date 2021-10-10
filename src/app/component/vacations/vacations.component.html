@@ -1,5 +1,37 @@
 <div class="container vacations-container">
   <div class="row">
+    <h1>Предстоящий отпуск</h1>
+  </div>
+  <div class="row">
+    <div *ngFor="let vacation of (this.vacationService.currentPeriodVacations)" class="col-auto vacation-item">
+      <div class="vacation-buttons-container">
+        <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null"
+                mat-mini-fab color="disabled" matTooltip="Показать скан-копию уведомления">
+          <mat-icon (click)="downloadImageFile(vacation)" class="gray-icon">crop_original</mat-icon>
+        </button>
+        <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath === null"
+                mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию уведомления">
+          <mat-icon (click)="uploadFileDialog(vacation)" class="gray-icon">cloud_upload</mat-icon>
+        </button>
+        <button *ngIf="vacation.vacationStatement != null" mat-mini-fab color="disabled" matTooltip="Скачать уведомление в формате .docx">
+          <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">description</mat-icon>
+        </button>
+        <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">
+          <mat-icon (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
+        </button>
+      </div>
+      <mat-form-field appearance="fill">
+        <mat-label>{{vacation.message}}</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input [attr.readonly] = "this.vacationService.blockChanges ? '' : null"  matStartDate [value]="vacation.dateFrom">
+          <input [attr.readonly] = "this.vacationService.blockChanges ? '' : null"  matEndDate [value]="vacation.dateTo">
+        </mat-date-range-input>
+        <mat-datepicker-toggle *ngIf="!this.vacationService.blockChanges" matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
     <h1>Мой отпуск</h1>
   </div>
   <div class="row">
