@@ -57,4 +57,8 @@ export class HeaderComponent implements OnInit {
   toAbsenceCalendar() {
     this.router.navigateByUrl('/absence-calendar');
   }
+
+  toWorkCalendar() {
+    this.router.navigateByUrl('/work-calendar');
+  }
 }

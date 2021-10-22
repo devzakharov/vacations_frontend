@@ -40,6 +40,8 @@ export class DepartmentComponent implements OnInit {
 
   displayedColumns: string[] = ['demo-name', 'demo-position', 'demo-vacations', 'demo-approvals', 'demo-approve'];
   dataSource = ELEMENT_DATA;
+  nextYear = new Date().getFullYear() + 1;
+  currentYear = new Date().getFullYear();
 
   fillUserArray(departmentId : number) {
 
@@ -122,5 +124,9 @@ export class DepartmentComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  compareDates(dateString : string) {
+    return new Date(dateString).getFullYear() === this.nextYear;
   }
 }

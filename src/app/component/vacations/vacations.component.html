@@ -16,9 +16,9 @@
         <button *ngIf="vacation.vacationStatement != null" mat-mini-fab color="disabled" matTooltip="Скачать уведомление в формате .docx">
           <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">description</mat-icon>
         </button>
-        <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">
-          <mat-icon (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>
-        </button>
+<!--        <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">-->
+<!--          <mat-icon (click)="removeVacation(vacation)" class="gray-icon">delete</mat-icon>-->
+<!--        </button>-->
       </div>
       <mat-form-field appearance="fill">
         <mat-label>{{vacation.message}}</mat-label>
@@ -32,7 +32,7 @@
     </div>
   </div>
   <div class="row">
-    <h1>Мой отпуск</h1>
+    <h1>Запланированный отпуск</h1>
   </div>
   <div class="row">
     <h2>Условия</h2>

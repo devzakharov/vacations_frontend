@@ -339,4 +339,14 @@ export class OrganisationComponent implements OnInit {
     });
   }
 
+  nextYear = new Date().getFullYear() + 1;
+  currentYear = new Date().getFullYear();
+
+  compareDateThisYear(dateString : string) {
+    return new Date(dateString).getFullYear() === this.currentYear;
+  }
+
+  compareDateNextYear(dateString : string) {
+    return new Date(dateString).getFullYear() < this.nextYear;
+  }
 }

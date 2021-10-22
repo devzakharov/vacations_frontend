@@ -42,6 +42,7 @@ import { UploadFileDialogComponent } from './component/upload-file-dialog/upload
 import {MatToolbar, MatToolbarModule} from "@angular/material/toolbar";
 import { OrganisationAddDialogComponent } from './component/organisation-add-dialog/organisation-add-dialog.component';
 import {MatChipsModule} from "@angular/material/chips";
+import { WorkCalendarComponent } from './component/work-calendar/work-calendar.component';
 
 
 const appRoutes: Routes = [
@@ -52,6 +53,7 @@ const appRoutes: Routes = [
   { path: 'organisation', component: OrganisationComponent},
   { path: 'all-organisations', component: AllOrganisationsComponent},
   { path: 'absence-calendar', component: AbsenceCalendarComponent},
+  { path: 'work-calendar', component: WorkCalendarComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full'},
 ]
 
@@ -75,6 +77,7 @@ const appRoutes: Routes = [
     AbsenceCalendarComponent,
     UploadFileDialogComponent,
     OrganisationAddDialogComponent,
+    WorkCalendarComponent,
   ],
   imports: [
     MatNativeDateModule,

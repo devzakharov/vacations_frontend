@@ -21,7 +21,7 @@
           <span *ngIf="user.vacations === null">Отпуска не внесены</span>
           <div class="vacations-table-list">
             <ng-container *ngFor="let vacation of user.vacations">
-              <ng-container *ngIf="vacation.vacationType === 'COMMON'">
+              <ng-container *ngIf="vacation.vacationType === 'COMMON' && compareDates(vacation.dateFrom)">
                 <span>
                   {{'c: ' + this.parseStringToDate(vacation.dateFrom) + ' по: ' + this.parseStringToDate(vacation.dateTo)}}
                 </span>

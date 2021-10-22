@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="row">
+    <h1>Производственный календарь</h1>
+  </div>
+  <div class="row">
+    <p>
+      Внимание, производственный календарь устанавливается на следующий календарный год.
+      <br>Если в трудовой календарь не внесены даты выходных дней, отпуска рассчитываются без учета официальных выходных дней.
+      <br>После внесения новых нерабочих дней, отпуска, уже назначенные на эти дни, перерассчитываются.
+    </p>
+  </div>
+  <div class="row">
+    <div class="col-auto">
+      <mat-form-field appearance="fill">
+        <mat-label>Выберите дату</mat-label>
+        <input matInput [matDatepicker]="picker" [formControl]="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker  startView="year" [startAt]="startDate"></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="col-auto">
+      <button  matTooltip="Добавить дату" mat-fab color="primary" aria-label="Добавить дату" (click)="addDate()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Текущий: {{cYear}}</h2>
+      <ng-container *ngFor="let restDay of this.workCalendarService.dates">
+          <div class="rest-day" *ngIf="cutStringDateToYear(restDay.date) === cYear">
+            {{restDay.date}}
+            <button mat-mini-fab color="disabled" matTooltip="Удалить дату">
+              <mat-icon (click)="removeDate(restDay)" class="gray-icon">delete</mat-icon>
+            </button>
+          </div>
+      </ng-container>
+    </div>
+    <div class="col-md-6">
+      <h2>Следующий: {{nYear}}</h2>
+      <ng-container *ngFor="let restDay of this.workCalendarService.dates">
+          <div class="rest-day rest-day-item" *ngIf="cutStringDateToYear(restDay.date) === nYear">
+            {{restDay.date}}
+            <button mat-mini-fab color="disabled" matTooltip="Удалить дату">
+              <mat-icon (click)="removeDate(restDay)" class="gray-icon">delete</mat-icon>
+            </button>
+          </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

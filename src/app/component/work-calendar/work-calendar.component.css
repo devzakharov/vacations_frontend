@@ -1,0 +1,24 @@
+.rest-day-item button {
+  width: 30px;
+  height: 30px;
+  margin-left: 3px;
+}
+.rest-day-item button > span {
+  padding: 0 !important;
+}
+::ng-deep .rest-day-item .mat-icon {
+  height:20px !important;
+  width:20px !important;
+  font-size:20px !important;
+}
+::ng-deep .rest-day-item .mat-button-wrapper {
+  padding: 0;
+}
+.rest-day-item {
+  margin-bottom: 13px;
+  border: 1px solid gray;
+  border-radius: 20px;
+  padding-left: 10px;
+  display: inline-block;
+  margin-right: 10px;
+}
