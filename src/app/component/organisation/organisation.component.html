@@ -31,10 +31,10 @@
           <button mat-mini-fab color="disabled" matTooltip="Удалить отдел" aria-label="Удалить отдел"(click)="this.deleteDepartment(department)">
             <mat-icon class="gray-icon">clear</mat-icon>
           </button>
-          <h2>{{department.displayName}} <span *ngIf="isAllCommonVacationsApproved(department) && isUsersHasVacations(department)">(Отдел утвержден руководителем)</span></h2>
+          <h2>{{department.displayName}} <span *ngIf="department.isAllCommonVacationsApproved && isUsersHasVacations(department)">(Отдел утвержден руководителем)</span></h2>
         </div>
 
-        <table mat-table [dataSource]="department.users" [class.vacations-approved]="isAllCommonVacationsApproved(department) && isUsersHasVacations(department)" class="organisation-table mat-elevation-z8" multiTemplateDataRows>
+        <table mat-table [dataSource]="department.users" [class.vacations-approved]="department.isAllCommonVacationsApproved && isUsersHasVacations(department)" class="organisation-table mat-elevation-z8" multiTemplateDataRows>
 
           <ng-container matColumnDef="user-name">
             <th mat-header-cell *matHeaderCellDef width="340"> Ф.И.О. </th>
@@ -66,6 +66,10 @@
                     <ng-container *ngIf="vacation.vacationType === 'COMMON' && !compareDateThisYear(vacation.dateFrom)">
                       <div class="vacation-item">
                         <div class="vacation-buttons-container">
+                          <button (click)="editVacation(vacation, $event)" *ngIf="headerService.isVacationMaster() && fourDayBeforeVacation(vacation)"
+                                  mat-mini-fab color="disabled" matTooltip="Редактировать отпуск">
+                            <mat-icon  class="gray-icon">edit</mat-icon>
+                          </button>
                           <button (click)="downloadImageFile(vacation, $event, 'order')" *ngIf="vacation.vacationOrder != null && vacation.vacationOrder.signedOrderPath != null"
                                   mat-mini-fab color="disabled" matTooltip="Показать скан-копию приказа">
                             <mat-icon  class="gray-icon">crop_original</mat-icon>
@@ -102,6 +106,10 @@
                     <ng-container *ngIf="vacation.vacationType === 'COMMON' && compareDateThisYear(vacation.dateFrom) && compareDateNextYear(vacation.dateFrom)">
                       <div class="vacation-item">
                         <div class="vacation-buttons-container">
+                          <button (click)="editVacation(vacation, $event)" *ngIf="headerService.isVacationMaster() && fourDayBeforeVacation(vacation)"
+                                  mat-mini-fab color="disabled" matTooltip="Редактировать отпуск">
+                            <mat-icon  class="gray-icon">edit</mat-icon>
+                          </button>
                           <button (click)="downloadImageFile(vacation, $event, 'order')" *ngIf="vacation.vacationOrder != null && vacation.vacationOrder.signedOrderPath != null"
                                   mat-mini-fab color="disabled" matTooltip="Показать скан-копию приказа">
                             <mat-icon  class="gray-icon">crop_original</mat-icon>

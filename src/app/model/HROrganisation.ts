@@ -8,6 +8,7 @@ export class HROrganisation extends Organisation{
   displayName : string;
   departments : HRDepartment[];
 
+
   constructor(id: number, inn: string, name: string, displayName: string, departments : HRDepartment[]) {
     super(id, inn, name, displayName);
     this.id = id;

@@ -370,17 +370,19 @@ export class AddVacationDialog {
     });
   }
 
-  nowDate = new Date();
-  y = this.nowDate.getFullYear();
-  m = this.nowDate.getMonth();
-  d = this.nowDate.getDate();
-  startDate = new Date(this.y + 1, this.m, this.d);
+  nowDate = moment();
+  y = this.nowDate.format('YYYY');
+  m = this.nowDate.format('M');
+  d = this.nowDate.format('D');
+  startDate = moment().add(1, "year");
   addVacationForm: FormGroup;
   vacationForSave : Vacation = new Vacation(0, '', '', '', 'COMMON', 0, 'NOT_APPROVED');
 
-  monthFilter = (m: Date | null): boolean => {
-    const month = (m || new Date()).getMonth();
-    return this.data.months.includes((month + 1).toString());
+  monthFilter = (m: Moment | null): boolean => {
+    const month = m?.format('M');
+    // console.log(month);
+    if (month) return this.data.months.includes((month).toString());
+    return false;
   }
 
   saveVacation() {

@@ -22,6 +22,7 @@ import {DepartmentAddDialogComponent} from "../department-add-dialog/department-
 import {UploadFileDialogComponent} from "../upload-file-dialog/upload-file-dialog.component";
 import {OrganisationAddDialogComponent} from "../organisation-add-dialog/organisation-add-dialog.component";
 import {Organisation} from "../../model/Organisation";
+import {VacationEditDialogComponent} from "../vacation-edit-dialog/vacation-edit-dialog.component";
 
 const ELEMENT_DATA: HRDepartment[] = [];
 
@@ -77,6 +78,7 @@ export class OrganisationComponent implements OnInit {
             ELEMENT_DATA.length = 0;
             this.organisationService.currentOrganisation = response;
             this.organisationService.currentOrganisation.departments.forEach(department => {
+              console.log(department)
             ELEMENT_DATA.push(department);
           });
           if (this.table) this.table.renderRows();
@@ -162,12 +164,27 @@ export class OrganisationComponent implements OnInit {
     return false;
   }
 
-  isAllCommonVacationsApproved(department : HRDepartment) : boolean {
-    return !(department.users || []).some(
-      user => (user.vacations || []).some(
-        vacation => vacation.vacationType === 'COMMON' && vacation.departmentHeadApproval !== 'APPROVED'));
-
-  }
+  // isAllCommonVacationsApproved(department : HRDepartment) : boolean {
+  //
+  //   department.users.forEach(x => {
+  //     if (x.vacations === null) {
+  //       return false;
+  //     }
+  //     if (x.vacations.some(vacation => vacation.vacationType === 'COMMON' && vacation.departmentHeadApproval === 'NOT_APPROVED')) {
+  //       return false;
+  //     } else {
+  //       return true;
+  //     }
+  //   });
+  //
+  //   // department.users.map()
+  //
+  //
+  //   // return !(department.users || []).some(
+  //   //   user => (user.vacations || []).some(
+  //   //     vacation => vacation.vacationType === 'COMMON' && vacation.departmentHeadApproval === 'NOT_APPROVED'));
+  //   return false;
+  // }
 
   isUsersHasVacations(department : HRDepartment) : boolean {
     return (department.users || []).some(
@@ -348,5 +365,24 @@ export class OrganisationComponent implements OnInit {
 
   compareDateNextYear(dateString : string) {
     return new Date(dateString).getFullYear() < this.nextYear;
+  }
+
+  editVacation(vacation: Vacation, $event: MouseEvent) {
+    $event.stopPropagation();
+    console.log(vacation);
+    const dialogRef = this.dialog.open(VacationEditDialogComponent, {
+      data: {
+        vacation : vacation,
+      },
+      width : '480px'
+    });
+
+    dialogRef.afterClosed().subscribe(response => {
+      this.ngOnInit();
+    });
+  }
+
+  fourDayBeforeVacation(vacation : Vacation) {
+    return moment(vacation.dateFrom).diff(moment(), "days") >= 4;
   }
 }

@@ -65,6 +65,10 @@ export class VacationService {
     return this.http.post<Vacation>(globals.server + '/api/v1/vacations/add', body);
   }
 
+  editVacation(body : Vacation) {
+    return this.http.post<Vacation>(globals.server + '/api/v1/vacations/update', body);
+  }
+
   userConfirmVacations() {
     return this.http.put<User>(globals.server + '/api/v1/vacations/approve', {'vacation_approval' : 'APPROVED'});
   }

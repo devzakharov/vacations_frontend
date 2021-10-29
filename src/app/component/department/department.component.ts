@@ -66,6 +66,8 @@ export class DepartmentComponent implements OnInit {
   approveUserVacations(user : any) {
     this.vacationService.approveUserVacations(user).subscribe(response => {
 
+      console.log(response);
+
       // @ts-ignore
       ELEMENT_DATA.find(el => {return el.id === response.id}).vacations = response.vacations;
 

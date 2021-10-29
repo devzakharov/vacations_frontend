@@ -43,6 +43,9 @@ import {MatToolbar, MatToolbarModule} from "@angular/material/toolbar";
 import { OrganisationAddDialogComponent } from './component/organisation-add-dialog/organisation-add-dialog.component';
 import {MatChipsModule} from "@angular/material/chips";
 import { WorkCalendarComponent } from './component/work-calendar/work-calendar.component';
+import { VacationEditDialogComponent } from './component/vacation-edit-dialog/vacation-edit-dialog.component';
+import {MomentUtcDateAdapter} from "./adapter/MomentUtcDateAdapter";
+import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule} from "@angular/material-moment-adapter";
 
 
 const appRoutes: Routes = [
@@ -78,6 +81,7 @@ const appRoutes: Routes = [
     UploadFileDialogComponent,
     OrganisationAddDialogComponent,
     WorkCalendarComponent,
+    VacationEditDialogComponent,
   ],
   imports: [
     MatNativeDateModule,
@@ -103,12 +107,14 @@ const appRoutes: Routes = [
     FormsModule,
     MatCheckboxModule,
     MatToolbarModule,
-    MatChipsModule
+    MatChipsModule,
+    MatMomentDateModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'ru'},
-    {provide: DateAdapter, useClass: CustomDateAdapter},
+    {provide: DateAdapter, useClass: MomentUtcDateAdapter},
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true }}
     ],
   bootstrap: [AppComponent]
 })

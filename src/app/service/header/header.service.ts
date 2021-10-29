@@ -72,4 +72,8 @@ export class HeaderService {
   isGeneralDirector() {
     return this.currentUserRoles.includes('ROLE_GENERAL_DIRECTOR');
   }
+
+  isVacationMaster() {
+    return this.currentUserRoles.includes('ROLE_VACATIONS_MASTER');
+  }
 }
