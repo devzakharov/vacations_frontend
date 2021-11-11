@@ -11,6 +11,7 @@ import {DepartmentService} from "../../service/department/department.service";
 import {Role} from "../../type/Role";
 import {HROrganisation} from "../../model/HROrganisation";
 import {User} from "../../model/User";
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-user-add-dialog',
@@ -18,6 +19,8 @@ import {User} from "../../model/User";
   styleUrls: ['./user-add-dialog.component.css']
 })
 export class UserAddDialogComponent implements OnInit {
+
+  date = new FormControl();
 
   user : HRUser = new HRUser(0,
     '',
@@ -33,7 +36,8 @@ export class UserAddDialogComponent implements OnInit {
     [{id: 1, name: "ROLE_USER", displayName: "Сотрудник"}],
     '',
     [],
-    []);
+    [],
+    '');
 
   constructor(
     public dialogRef: MatDialogRef<UserAddDialogComponent>,
@@ -55,7 +59,7 @@ export class UserAddDialogComponent implements OnInit {
 
   addUser(user: HRUser) {
     console.log(user);
-
+    user.dateOfEmployment = this.date.value;
     this.userService.addNewUser(user).subscribe(response => {
       console.log(response);
       this.dialogRef.close();

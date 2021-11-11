@@ -10,6 +10,7 @@ import {Department} from "../../model/Department";
 import {OrganisationService} from "../../service/organisation/organisation.service";
 import {DepartmentService} from "../../service/department/department.service";
 import {RoleService} from "../../service/role/role.service";
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-user-edit-dialog',
@@ -18,6 +19,7 @@ import {RoleService} from "../../service/role/role.service";
 })
 export class UserEditDialogComponent implements OnInit {
 
+  fc = new FormControl();
 
   constructor(
     public dialogRef: MatDialogRef<UserEditDialogComponent>,
@@ -38,6 +40,7 @@ export class UserEditDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.data);
     this.organisationService.setOrganisationArray();
     this.refreshDepartmentsArray(this.data.organisationId, null);
     this.excludeExistingUserRoles(this.data.roles);
@@ -65,6 +68,7 @@ export class UserEditDialogComponent implements OnInit {
   }
 
   saveUser(data: HRUser) {
+    data.dateOfEmployment = this.fc.value;
     this.userService.saveUser(data).subscribe(
       response => {
         console.log(response);

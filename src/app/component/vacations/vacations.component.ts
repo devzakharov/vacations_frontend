@@ -15,6 +15,7 @@ import {UserService} from "../../service/user/user.service";
 import {NotificationService} from "../../service/notification/notification.service";
 import {NotificationToSend} from "../../model/NotificationToSend";
 import {UploadFileDialogComponent} from "../upload-file-dialog/upload-file-dialog.component";
+import {VacationUserEditDialogComponent} from "../vacation-user-edit-dialog/vacation-user-edit-dialog.component";
 
 @Component({
   selector: 'app-vacations',
@@ -346,6 +347,27 @@ export class VacationsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(response => {
       this.ngOnInit();
     });
+  }
+
+  editVacation(vacation: Vacation) {
+    const dialogRef = this.dialog.open(VacationUserEditDialogComponent, {
+      data: {
+        vacation : vacation,
+      },
+      width : '450px'
+    });
+
+    dialogRef.afterClosed().subscribe(response => {
+      this.ngOnInit();
+    });
+  }
+
+  moreThanTwoWeeksBeforeVacation(vacation: Vacation) {
+    return moment(vacation.dateFrom).diff(moment(), 'days') + 1 >= 15;
+  }
+
+  isTwoWeeksVacation(vacation: Vacation) {
+    return moment(vacation.dateTo).diff(moment(vacation.dateFrom), 'days') + 1 >= 10;
   }
 }
 

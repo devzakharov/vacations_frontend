@@ -5,6 +5,12 @@
   <div class="row">
     <div *ngFor="let vacation of (this.vacationService.currentPeriodVacations)" class="col-auto vacation-item">
       <div class="vacation-buttons-container">
+        <ng-container *ngIf="!isTwoWeeksVacation(vacation)">
+        <button (click)="editVacation(vacation)" *ngIf="moreThanTwoWeeksBeforeVacation(vacation)"
+                mat-mini-fab color="disabled" matTooltip="Редактировать отпуск">
+          <mat-icon  class="gray-icon">edit</mat-icon>
+        </button>
+        </ng-container>
         <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null"
                 mat-mini-fab color="disabled" matTooltip="Показать скан-копию уведомления">
           <mat-icon (click)="downloadImageFile(vacation)" class="gray-icon">crop_original</mat-icon>

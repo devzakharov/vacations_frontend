@@ -17,6 +17,7 @@ export class User {
   roles : Role[];
   password : string;
   servicedOrganisations : Organisation[];
+  dateOfEmployment : string;
 
   constructor(
     id : number,
@@ -32,7 +33,8 @@ export class User {
     vacationsApproval: string,
     roles: Role[],
     password : string,
-    servicedOrganisations : Organisation[]
+    servicedOrganisations : Organisation[],
+    dateOfEmployment : string
   ) {
     this.id = id;
     this.username = username;
@@ -48,5 +50,6 @@ export class User {
     this.roles = roles;
     this.password = password;
     this.servicedOrganisations = servicedOrganisations;
+    this.dateOfEmployment = dateOfEmployment;
   }
 }

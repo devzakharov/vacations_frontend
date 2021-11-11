@@ -46,6 +46,7 @@ import { WorkCalendarComponent } from './component/work-calendar/work-calendar.c
 import { VacationEditDialogComponent } from './component/vacation-edit-dialog/vacation-edit-dialog.component';
 import {MomentUtcDateAdapter} from "./adapter/MomentUtcDateAdapter";
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule} from "@angular/material-moment-adapter";
+import { VacationUserEditDialogComponent } from './component/vacation-user-edit-dialog/vacation-user-edit-dialog.component';
 
 
 const appRoutes: Routes = [
@@ -82,6 +83,7 @@ const appRoutes: Routes = [
     OrganisationAddDialogComponent,
     WorkCalendarComponent,
     VacationEditDialogComponent,
+    VacationUserEditDialogComponent,
   ],
   imports: [
     MatNativeDateModule,
