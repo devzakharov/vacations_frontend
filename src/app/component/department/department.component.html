@@ -8,6 +8,13 @@
     При отклонении или утверждении сотрудник увидит оповещение на почте.<br>
     После того, как будет утвержден график последнего сотрудника, кадровый работник организации, или выполняющий его обязанности, получит автоматическое оповещение.</p>
   </div>
+  <div class="row" style="margin-bottom: 18px">
+    <div class="buttons-container">
+      <button matTooltip="Посмотреть пересечения" style="margin-right: 13px" mat-raised-button color="primary" (click)="showCrossingVacationsDialog()">
+        <mat-icon>border_inner</mat-icon><span> Посмотреть пересечения</span>
+      </button>
+    </div>
+  </div>
   <div class="row">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
 

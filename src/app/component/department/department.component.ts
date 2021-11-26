@@ -11,6 +11,9 @@ import {UserNotification} from "../../model/UserNotification";
 import {NotificationService} from "../../service/notification/notification.service";
 import {NotifierService} from "angular-notifier";
 import {NotificationToSend} from "../../model/NotificationToSend";
+import {UserAddDialogComponent} from "../user-add-dialog/user-add-dialog.component";
+import {CrossingVacationsDialogComponent} from "../crossing-vacations-dialog/crossing-vacations-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 const ELEMENT_DATA: User[] = [];
 
@@ -27,6 +30,7 @@ export class DepartmentComponent implements OnInit {
               private headerService : HeaderService,
               private vacationService : VacationService,
               private notificationService : NotificationService,
+              public dialog : MatDialog,
               private notifierService : NotifierService) { }
 
   // @ts-ignore
@@ -130,5 +134,17 @@ export class DepartmentComponent implements OnInit {
 
   compareDates(dateString : string) {
     return new Date(dateString).getFullYear() === this.nextYear;
+  }
+
+  showCrossingVacationsDialog() {
+    console.log(this.dataSource);
+    const dialogRef = this.dialog.open(CrossingVacationsDialogComponent, {
+      width: '480px',
+      data: this.dataSource
+    });
+
+    dialogRef.afterClosed().subscribe(response => {
+      this.ngOnInit();
+    });
   }
 }

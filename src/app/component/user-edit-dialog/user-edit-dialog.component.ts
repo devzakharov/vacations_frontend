@@ -156,4 +156,9 @@ export class UserEditDialogComponent implements OnInit {
     return this.data.servicedOrganisations.find(o => o.id === servicedOrganisation.id);
   }
 
+  setFactualOrganisation(factualOrganisationId: number, $event: any) {
+    console.log($event);
+    if ($event != null) this.data.factualOrganisationId = $event.value;
+    console.log(this.data);
+  }
 }

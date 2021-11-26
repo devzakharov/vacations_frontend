@@ -115,4 +115,8 @@ export class VacationService {
   saveFile(formData : FormData) {
     return this.http.post(globals.server + '/api/v1/files', formData);
   }
+
+  setVacationPayCalculated(vacation: any) {
+    return this.http.post<Vacation>(globals.server + '/api/v1/vacations/vacation-pay-calculated', vacation);
+  }
 }

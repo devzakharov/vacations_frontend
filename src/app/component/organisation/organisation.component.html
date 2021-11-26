@@ -75,11 +75,11 @@
                             <mat-icon  class="gray-icon">crop_original</mat-icon>
                           </button>
                           <button (click)="downloadImageFile(vacation, $event, 'statement')" *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null"
-                                  mat-mini-fab color="disabled" matTooltip="Показать скан-копию уведомления">
+                                  mat-mini-fab color="disabled" matTooltip="Показать скан-копию заявления">
                             <mat-icon  class="gray-icon">crop_original</mat-icon>
                           </button>
                           <button *ngIf="vacation.vacationOrder != null && vacation.vacationOrder.signedOrderPath === null"
-                                  mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию уведомления">
+                                  mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию заявления">
                             <mat-icon (click)="uploadFileDialog(vacation)" class="gray-icon">cloud_upload</mat-icon>
                           </button>
                           <button *ngIf="vacation.vacationOrder != null" mat-mini-fab color="disabled" matTooltip="Скачать приказ в формате .docx">
@@ -106,6 +106,15 @@
                     <ng-container *ngIf="vacation.vacationType === 'COMMON' && compareDateThisYear(vacation.dateFrom) && compareDateNextYear(vacation.dateFrom)">
                       <div class="vacation-item">
                         <div class="vacation-buttons-container">
+                          <button (click)="calculateVacationPay(vacation, $event)"
+                                  *ngIf="headerService.isAccountant() && lessThanFourDayBeforeVacation(vacation) && vacation.vacationPayCalculated === false || headerService.isAdmin() && lessThanFourDayBeforeVacation(vacation) && vacation.vacationPayCalculated === false"
+                                  mat-mini-fab color="disabled" matTooltip="Отпускные не рассчитаны">
+                            <mat-icon  class="gray-icon">money_off</mat-icon>
+                          </button>
+                          <button *ngIf="headerService.isAccountant() && lessThanFourDayBeforeVacation(vacation) && vacation.vacationPayCalculated === true || headerService.isAdmin() && lessThanFourDayBeforeVacation(vacation) && vacation.vacationPayCalculated === true"
+                                  mat-mini-fab color="disabled" matTooltip="Отпускные рассчитаны">
+                            <mat-icon  class="green-icon">attach_money</mat-icon>
+                          </button>
                           <button (click)="editVacation(vacation, $event)" *ngIf="headerService.isVacationMaster() && fourDayBeforeVacation(vacation)"
                                   mat-mini-fab color="disabled" matTooltip="Редактировать отпуск">
                             <mat-icon  class="gray-icon">edit</mat-icon>
@@ -115,11 +124,11 @@
                             <mat-icon  class="gray-icon">crop_original</mat-icon>
                           </button>
                           <button (click)="downloadImageFile(vacation, $event, 'statement')" *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null"
-                                  mat-mini-fab color="disabled" matTooltip="Показать скан-копию уведомления">
+                                  mat-mini-fab color="disabled" matTooltip="Показать скан-копию заявления">
                             <mat-icon  class="gray-icon">crop_original</mat-icon>
                           </button>
                           <button *ngIf="vacation.vacationOrder != null && vacation.vacationOrder.signedOrderPath === null"
-                                  mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию уведомления">
+                                  mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию заявления">
                             <mat-icon (click)="uploadFileDialog(vacation)" class="gray-icon">cloud_upload</mat-icon>
                           </button>
                           <button *ngIf="vacation.vacationOrder != null" mat-mini-fab color="disabled" matTooltip="Скачать приказ в формате .docx">
@@ -147,10 +156,10 @@
                       </div>
                     </ng-container>
                   </ng-container>
-                  <button matTooltip="Добавить отсутствие" mat-mini-fab color="primary" aria-label="Добавить отсутствие"
-                          (click)="this.openUserAddLeaveDialog(user, $event)">
-                    <mat-icon>add</mat-icon>
-                  </button>
+<!--                  <button matTooltip="Добавить отсутствие" mat-mini-fab color="primary" aria-label="Добавить отсутствие"-->
+<!--                          (click)="this.openUserAddLeaveDialog(user, $event)">-->
+<!--                    <mat-icon>add</mat-icon>-->
+<!--                  </button>-->
                 </div>
               </div>
             </td>

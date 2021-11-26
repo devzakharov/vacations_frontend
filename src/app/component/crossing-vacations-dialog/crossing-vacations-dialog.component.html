@@ -1,0 +1,27 @@
+<h1 mat-dialog-title class="crossing-vacations-dialog-title">Пересечения графиков отпусков:</h1>
+<div mat-dialog-content class="crossing-vacations-dialog">
+  <ng-container *ngIf="crossedUsersAndVacations.length > 0">
+    <ng-container *ngFor="let user of crossedUsersAndVacations">
+      <div>
+        <p>У сотрудника <strong>{{this.findUsername(user.userId)}}</strong> есть пересечения с сотрудниками: </p>
+        <p *ngFor="let crossedUserId of user.crossedUsers">
+          <ng-container *ngIf="crossedUserId">
+            <span><strong>{{this.findUsername(crossedUserId)}}</strong></span>
+          </ng-container>
+        </p>
+        <p *ngFor="let crossedVacationId of user.crossedVacations">
+          <ng-container *ngIf="crossedVacationId">
+            <span>по отпуску: <strong>{{this.findVacationPeriod(crossedVacationId)}}</strong></span>
+          </ng-container>
+        </p>
+      </div>
+      <hr>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="crossedUsersAndVacations.length === 0">
+    Пересечений не найдено!
+  </ng-container>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Ок</button>
+</div>

@@ -47,6 +47,7 @@ import { VacationEditDialogComponent } from './component/vacation-edit-dialog/va
 import {MomentUtcDateAdapter} from "./adapter/MomentUtcDateAdapter";
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule} from "@angular/material-moment-adapter";
 import { VacationUserEditDialogComponent } from './component/vacation-user-edit-dialog/vacation-user-edit-dialog.component';
+import {CrossingVacationsDialogComponent} from "./component/crossing-vacations-dialog/crossing-vacations-dialog.component";
 
 
 const appRoutes: Routes = [
@@ -84,6 +85,7 @@ const appRoutes: Routes = [
     WorkCalendarComponent,
     VacationEditDialogComponent,
     VacationUserEditDialogComponent,
+    CrossingVacationsDialogComponent,
   ],
   imports: [
     MatNativeDateModule,

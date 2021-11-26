@@ -31,6 +31,7 @@ export class UserAddDialogComponent implements OnInit {
     '',
     0,
     this.headerService.currentUser.organisationId,
+    0,
     'ACTIVE',
     'NOT_APPROVED',
     [{id: 1, name: "ROLE_USER", displayName: "Сотрудник"}],
@@ -74,6 +75,11 @@ export class UserAddDialogComponent implements OnInit {
     console.log($event);
     if ($event != null) this.user.organisationId = $event.value;
     this.departmentService.getDepartmentsArrayByOrganisationId(this.user.organisationId);
+  }
+
+  setFactualOrganisation(organisation : number, $event : any) {
+    console.log($event);
+    if ($event != null) this.user.factualOrganisationId = $event.value;
   }
 
   setDepartmentValue($event: any) {

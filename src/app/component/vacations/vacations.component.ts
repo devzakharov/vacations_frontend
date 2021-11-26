@@ -398,7 +398,7 @@ export class AddVacationDialog {
   d = this.nowDate.format('D');
   startDate = moment().add(1, "year");
   addVacationForm: FormGroup;
-  vacationForSave : Vacation = new Vacation(0, '', '', '', 'COMMON', 0, 'NOT_APPROVED');
+  vacationForSave : Vacation = new Vacation(0, '', '', '', 'COMMON', 0, 'NOT_APPROVED', false);
 
   monthFilter = (m: Moment | null): boolean => {
     const month = m?.format('M');

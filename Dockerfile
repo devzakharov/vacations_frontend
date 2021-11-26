@@ -6,5 +6,6 @@ RUN npm install
 COPY . /app
 RUN npm run build --prod
 FROM nginx:1.20.1
-COPY --from=build-step /app/dist/ng-docker-example /usr/share/nginx/html
+COPY --from=build-step /app/dist/vacationsFrontend /usr/share/nginx/html
+COPY default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 4200:80

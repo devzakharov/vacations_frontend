@@ -23,6 +23,7 @@ import {UploadFileDialogComponent} from "../upload-file-dialog/upload-file-dialo
 import {OrganisationAddDialogComponent} from "../organisation-add-dialog/organisation-add-dialog.component";
 import {Organisation} from "../../model/Organisation";
 import {VacationEditDialogComponent} from "../vacation-edit-dialog/vacation-edit-dialog.component";
+import {errorObject} from "rxjs/internal-compatibility";
 
 const ELEMENT_DATA: HRDepartment[] = [];
 
@@ -384,5 +385,19 @@ export class OrganisationComponent implements OnInit {
 
   fourDayBeforeVacation(vacation : Vacation) {
     return moment(vacation.dateFrom).diff(moment(), "days") >= 4;
+  }
+
+  lessThanFourDayBeforeVacation(vacation : Vacation) {
+    return moment(vacation.dateFrom).diff(moment(), "days") <= 4;
+  }
+
+  calculateVacationPay(vacation: any, $event: MouseEvent) {
+    vacation.vacationPayCalculated = true;
+    this.vacationService.setVacationPayCalculated(vacation).subscribe(response => {
+      console.log(response);
+    }, error => {
+      console.log(error);
+    });
+    console.log(vacation);
   }
 }

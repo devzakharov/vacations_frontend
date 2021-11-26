@@ -12,6 +12,7 @@ export class User {
   position : string;
   departmentId : number;
   organisationId : number;
+  factualOrganisationId : number;
   status : string;
   vacationsApproval : string;
   roles : Role[];
@@ -29,6 +30,7 @@ export class User {
     position: string,
     departmentId: number,
     organisationId: number,
+    factualOrganisationId : number,
     status: string,
     vacationsApproval: string,
     roles: Role[],
@@ -45,6 +47,7 @@ export class User {
     this.position = position;
     this.departmentId = departmentId;
     this.organisationId = organisationId;
+    this.factualOrganisationId = factualOrganisationId;
     this.status = status;
     this.vacationsApproval = vacationsApproval;
     this.roles = roles;

@@ -60,7 +60,7 @@ export class VacationUserEditDialogComponent implements OnInit {
   }
 
   addNewVacation() {
-    let newVacation = new Vacation(0, '', '', 'Стандартный отпуск', 'COMMON', this.headerService.currentUser.id, 'NOT_APPROVED');
+    let newVacation = new Vacation(0, '', '', 'Стандартный отпуск', 'COMMON', this.headerService.currentUser.id, 'NOT_APPROVED', false);
     this.newVacations.push(newVacation);
   }
 }

@@ -12,14 +12,14 @@
         </button>
         </ng-container>
         <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null"
-                mat-mini-fab color="disabled" matTooltip="Показать скан-копию уведомления">
+                mat-mini-fab color="disabled" matTooltip="Показать скан-копию заявления">
           <mat-icon (click)="downloadImageFile(vacation)" class="gray-icon">crop_original</mat-icon>
         </button>
         <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath === null"
-                mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию уведомления">
+                mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию заявления">
           <mat-icon (click)="uploadFileDialog(vacation)" class="gray-icon">cloud_upload</mat-icon>
         </button>
-        <button *ngIf="vacation.vacationStatement != null" mat-mini-fab color="disabled" matTooltip="Скачать уведомление в формате .docx">
+        <button *ngIf="vacation.vacationStatement != null" mat-mini-fab color="disabled" matTooltip="Скачать заявление в формате .docx">
           <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">description</mat-icon>
         </button>
 <!--        <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">-->
@@ -56,14 +56,14 @@
     <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[0])" class="col-auto vacation-item">
       <div class="vacation-buttons-container">
         <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null"
-                mat-mini-fab color="disabled" matTooltip="Показать скан-копию уведомления">
+                mat-mini-fab color="disabled" matTooltip="Показать скан-копию заявления">
           <mat-icon (click)="downloadImageFile(vacation)" class="gray-icon">crop_original</mat-icon>
         </button>
         <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath === null"
-                mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию уведомления">
+                mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию заявления">
           <mat-icon (click)="uploadFileDialog(vacation)" class="gray-icon">cloud_upload</mat-icon>
         </button>
-        <button *ngIf="vacation.vacationStatement != null" mat-mini-fab color="disabled" matTooltip="Скачать уведомление в формате .docx">
+        <button *ngIf="vacation.vacationStatement != null" mat-mini-fab color="disabled" matTooltip="Скачать заявление в формате .docx">
           <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">description</mat-icon>
         </button>
         <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">
@@ -91,14 +91,14 @@
     <div *ngFor="let vacation of (this.vacationService.commonVacations | vacationsFilter:this.vacationPeriods[1])" class="col-auto vacation-item">
       <div class="vacation-buttons-container">
         <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath != null"
-                mat-mini-fab color="disabled" matTooltip="Показать скан-копию уведомления">
+                mat-mini-fab color="disabled" matTooltip="Показать скан-копию заявления">
           <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">crop_original</mat-icon>
         </button>
         <button *ngIf="vacation.vacationStatement != null && vacation.vacationStatement.signedStatementPath === null"
-                mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию уведомления">
+                mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию заявления">
           <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">cloud_upload</mat-icon>
         </button>
-        <button *ngIf="vacation.vacationStatement != null" mat-mini-fab color="disabled" matTooltip="Скачать уведомление в формате .docx">
+        <button *ngIf="vacation.vacationStatement != null" mat-mini-fab color="disabled" matTooltip="Скачать заявление в формате .docx">
           <mat-icon (click)="downloadDocxFile(vacation)" class="gray-icon">description</mat-icon>
         </button>
         <button mat-mini-fab color="disabled" matTooltip="Удалить отпуск" *ngIf="!this.vacationService.blockChanges">

@@ -40,6 +40,25 @@
         </ng-container>
       </mat-select>
     </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="this.headerService.isAdmin() || this.headerService.currentUser.servicedOrganisations.length > 0">
+      <mat-label>Фактическая организация (по документам)</mat-label>
+      <mat-select
+        (selectionChange)="this.setFactualOrganisation(user.organisationId, $event)"
+        name="factual_organisation"
+        [value]="user.factualOrganisationId"
+      >
+        <ng-container *ngIf="this.headerService.isAdmin()">
+          <mat-option *ngFor="let organisation of this.organisationService.organisationsArray" [value]="organisation.id">
+            {{organisation.displayName}}
+          </mat-option>
+        </ng-container>
+        <ng-container *ngIf="!this.headerService.isAdmin() && this.headerService.currentUser.servicedOrganisations.length > 0">
+          <mat-option *ngFor="let organisation of this.headerService.currentUser.servicedOrganisations" [value]="organisation.id">
+            {{organisation.displayName}}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Отдел:</mat-label>
       <mat-select (selectionChange)="this.setDepartmentValue($event)" name="department" [value]="">

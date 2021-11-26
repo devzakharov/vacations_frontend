@@ -14,6 +14,7 @@ export class HRUser extends User {
   position: string;
   departmentId: number;
   organisationId: number;
+  factualOrganisationId: number;
   status: string;
   vacationsApproval: string;
   roles: Role[];
@@ -22,8 +23,8 @@ export class HRUser extends User {
   servicedOrganisations : Organisation[];
   dateOfEmployment: string;
 
-  constructor(id: number, username: string, firstName: string, middleName: string, lastName: string, email: string, position: string, departmentId: number, organisationId: number, status: string, vacationsApproval: string, roles: Role[], password: string, vacations: Vacation[], servicedOrganisations : Organisation[], dateOfEmployment : string) {
-    super(id, username, firstName, middleName, lastName, email, position, departmentId, organisationId, status, vacationsApproval, roles, password, servicedOrganisations, dateOfEmployment);
+  constructor(id: number, username: string, firstName: string, middleName: string, lastName: string, email: string, position: string, departmentId: number, organisationId: number, factualOrganisationId : number, status: string, vacationsApproval: string, roles: Role[], password: string, vacations: Vacation[], servicedOrganisations : Organisation[], dateOfEmployment : string) {
+    super(id, username, firstName, middleName, lastName, email, position, departmentId, organisationId, factualOrganisationId, status, vacationsApproval, roles, password, servicedOrganisations, dateOfEmployment);
     this.id = id;
     this.username = username;
     this.firstName = firstName;
@@ -34,6 +35,7 @@ export class HRUser extends User {
     this.position = position;
     this.departmentId = departmentId;
     this.organisationId = organisationId;
+    this.factualOrganisationId = factualOrganisationId;
     this.status = status;
     this.vacationsApproval = vacationsApproval;
     this.roles = roles;
