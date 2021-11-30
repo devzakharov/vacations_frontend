@@ -11,7 +11,7 @@
     </ng-container>
     <ng-container *ngIf="organisationService.currentOrganisation !== undefined">
       <h1>Организация ({{organisationService.currentOrganisation.name}})</h1>
-      <div class="buttons-container">
+      <div class="buttons-container" *ngIf="!this.headerService.isAccountant()">
         <button matTooltip="Добавить нового сотрудника" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.openAddUserDialog(organisationService.currentOrganisation)">
           <mat-icon>add</mat-icon><span> Добавить нового сотрудника</span>
         </button>
@@ -28,7 +28,7 @@
       <ng-container *ngFor="let department of organisationService.currentOrganisation.departments">
 
         <div class="button-and-header-container">
-          <button mat-mini-fab color="disabled" matTooltip="Удалить отдел" aria-label="Удалить отдел"(click)="this.deleteDepartment(department)">
+          <button mat-mini-fab color="disabled" matTooltip="Удалить отдел" *ngIf="!this.headerService.isAccountant()" aria-label="Удалить отдел"(click)="this.deleteDepartment(department)">
             <mat-icon class="gray-icon">clear</mat-icon>
           </button>
           <h2>{{department.displayName}} <span *ngIf="department.isAllCommonVacationsApproved && isUsersHasVacations(department)">(Отдел утвержден руководителем)</span></h2>
@@ -39,7 +39,7 @@
           <ng-container matColumnDef="user-name">
             <th mat-header-cell *matHeaderCellDef width="340"> Ф.И.О. </th>
             <td mat-cell *matCellDef="let user">
-              <button class="edit-user-button" mat-mini-fab color="primary" aria-label="edit user" matTooltip="Редактировать пользователя"
+              <button *ngIf="!this.headerService.isAccountant()" class="edit-user-button" mat-mini-fab color="primary" aria-label="edit user" matTooltip="Редактировать пользователя"
                       (click)="this.openUserEditDialog(user, $event)">
                 <mat-icon class="gray-icon">edit</mat-icon>
               </button>
@@ -109,7 +109,7 @@
                           <button (click)="calculateVacationPay(vacation, $event)"
                                   *ngIf="headerService.isAccountant() && lessThanFourDayBeforeVacation(vacation) && vacation.vacationPayCalculated === false || headerService.isAdmin() && lessThanFourDayBeforeVacation(vacation) && vacation.vacationPayCalculated === false"
                                   mat-mini-fab color="disabled" matTooltip="Отпускные не рассчитаны">
-                            <mat-icon  class="gray-icon">money_off</mat-icon>
+                            <mat-icon  class="red-icon">money_off</mat-icon>
                           </button>
                           <button *ngIf="headerService.isAccountant() && lessThanFourDayBeforeVacation(vacation) && vacation.vacationPayCalculated === true || headerService.isAdmin() && lessThanFourDayBeforeVacation(vacation) && vacation.vacationPayCalculated === true"
                                   mat-mini-fab color="disabled" matTooltip="Отпускные рассчитаны">
@@ -127,11 +127,11 @@
                                   mat-mini-fab color="disabled" matTooltip="Показать скан-копию заявления">
                             <mat-icon  class="gray-icon">crop_original</mat-icon>
                           </button>
-                          <button *ngIf="vacation.vacationOrder != null && vacation.vacationOrder.signedOrderPath === null"
-                                  mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию заявления">
+                          <button *ngIf="!headerService.isAccountant() && vacation.vacationOrder != null && vacation.vacationOrder.signedOrderPath === null"
+                                  mat-mini-fab color="disabled" matTooltip="Выгрузить скан-копию приказа">
                             <mat-icon (click)="uploadFileDialog(vacation)" class="gray-icon">cloud_upload</mat-icon>
                           </button>
-                          <button *ngIf="vacation.vacationOrder != null" mat-mini-fab color="disabled" matTooltip="Скачать приказ в формате .docx">
+                          <button *ngIf="!headerService.isAccountant() && vacation.vacationOrder != null" mat-mini-fab color="disabled" matTooltip="Скачать приказ в формате .docx">
                             <mat-icon (click)="downloadDocxFile(vacation, $event)" class="gray-icon">description</mat-icon>
                           </button>
                         </div>
