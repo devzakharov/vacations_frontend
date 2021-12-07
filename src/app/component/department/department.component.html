@@ -1,3 +1,33 @@
+<div class="container" *ngIf="this.vacationTransferArr.length > 0">
+  <div class="row">
+    <h1>Запросы на перенос отпуска:</h1>
+  </div>
+  <div class="row">
+    <div class="transfer-container">
+      <ng-container *ngFor="let transfer of this.vacationTransferArr">
+        <div class="transfer-item">
+          <p><b>Сотрудник:</b> {{ this.userMap[transfer.id].firstName }} {{ this.userMap[transfer.id].lastName }}</p>
+          <p><b>Отпуск:</b> c {{ this.vacationsMap[transfer.id].dateFrom }} до {{ this.vacationsMap[transfer.id].dateTo }}</p>
+          <ul><b>Новые даты:</b>
+            <li *ngFor="let range of transfer.vacationTransferPeriodList">
+              c {{ range.dateFrom }} по {{ range.dateTo }}
+            </li>
+          </ul>
+          <div class="transfer-item-buttons">
+            <button class="accept-transfer-button" mat-mini-fab color="primary" aria-label="edit user" matTooltip="Утвердить"
+                    (click)="this.approve(transfer, $event)">
+              <mat-icon class="green-icon">done</mat-icon>
+            </button>
+            <button class="accept-transfer-button" mat-mini-fab color="primary" aria-label="edit user" matTooltip="Отказать"
+                    (click)="this.reject(transfer, $event)">
+              <mat-icon class="red-icon">close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
 <div class="container">
   <div class="row">
     <h1>Мой отдел</h1>

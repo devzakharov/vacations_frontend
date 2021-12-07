@@ -14,6 +14,7 @@ import {NotificationToSend} from "../../model/NotificationToSend";
 import {UserAddDialogComponent} from "../user-add-dialog/user-add-dialog.component";
 import {CrossingVacationsDialogComponent} from "../crossing-vacations-dialog/crossing-vacations-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {VacationTransfer} from "../../model/VacationTransfer";
 
 const ELEMENT_DATA: User[] = [];
 
@@ -24,6 +25,11 @@ const ELEMENT_DATA: User[] = [];
   styleUrls: ['./department.component.css']
 })
 export class DepartmentComponent implements OnInit {
+
+  vacationTransferArr : VacationTransfer[] = [];
+  //@ts-ignore
+  vacationsMap : any = {};
+  userMap : any = {};
 
   constructor(private departmentService : DepartmentService,
               private userService : UserService,
@@ -39,6 +45,23 @@ export class DepartmentComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getUser().subscribe(response => {
       this.fillUserArray(response.departmentId);
+    })
+    this.vacationService.getVacationTransferList(this.headerService.currentUser.id).subscribe(response => {
+      this.vacationTransferArr = response;
+      console.log(this.vacationTransferArr);
+      if (this.vacationTransferArr.length > 0) {
+        this.vacationTransferArr.forEach(transfer => {
+            this.vacationService.getVacationById(transfer.vacationId).subscribe(response => {
+              this.vacationsMap[transfer.id] = response;
+              this.userService.getUserById(this.vacationsMap[transfer.id].userId).subscribe(response => {
+                this.userMap[transfer.id] = response;
+                console.log(this.vacationsMap);
+                console.log(this.userMap);
+              });
+            });
+        })
+      }
+
     })
   }
 
@@ -147,4 +170,28 @@ export class DepartmentComponent implements OnInit {
       this.ngOnInit();
     });
   }
+
+  approve(transfer: any, $event: MouseEvent) {
+    this.vacationService.approveTransfer(transfer).subscribe(response => {
+      const index = this.vacationTransferArr.indexOf(transfer);
+      if (index > -1) {
+        this.vacationTransferArr.splice(index, 1);
+      }
+    }, error => {
+      console.log(error);
+    });
+
+  }
+
+  reject(transfer: any, $event: MouseEvent) {
+    this.vacationService.rejectTransfer(transfer).subscribe(response => {
+      const index = this.vacationTransferArr.indexOf(transfer);
+      if (index > -1) {
+        this.vacationTransferArr.splice(index, 1);
+      }
+    }, error => {
+      console.log(error);
+    });
+  }
+
 }

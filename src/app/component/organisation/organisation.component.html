@@ -11,7 +11,7 @@
     </ng-container>
     <ng-container *ngIf="organisationService.currentOrganisation !== undefined">
       <h1>Организация ({{organisationService.currentOrganisation.name}})</h1>
-      <div class="buttons-container" *ngIf="!this.headerService.isAccountant()">
+      <div class="buttons-container" *ngIf="!this.headerService.isAccountant() || this.headerService.isPersonnelOfficer()">
         <button matTooltip="Добавить нового сотрудника" style="margin-right: 13px" mat-raised-button color="primary" (click)="this.openAddUserDialog(organisationService.currentOrganisation)">
           <mat-icon>add</mat-icon><span> Добавить нового сотрудника</span>
         </button>
@@ -28,7 +28,7 @@
       <ng-container *ngFor="let department of organisationService.currentOrganisation.departments">
 
         <div class="button-and-header-container">
-          <button mat-mini-fab color="disabled" matTooltip="Удалить отдел" *ngIf="!this.headerService.isAccountant()" aria-label="Удалить отдел"(click)="this.deleteDepartment(department)">
+          <button mat-mini-fab color="disabled" matTooltip="Удалить отдел" *ngIf="!this.headerService.isAccountant() || this.headerService.isPersonnelOfficer()" aria-label="Удалить отдел"(click)="this.deleteDepartment(department)">
             <mat-icon class="gray-icon">clear</mat-icon>
           </button>
           <h2>{{department.displayName}} <span *ngIf="department.isAllCommonVacationsApproved && isUsersHasVacations(department)">(Отдел утвержден руководителем)</span></h2>
@@ -39,7 +39,7 @@
           <ng-container matColumnDef="user-name">
             <th mat-header-cell *matHeaderCellDef width="340"> Ф.И.О. </th>
             <td mat-cell *matCellDef="let user">
-              <button *ngIf="!this.headerService.isAccountant()" class="edit-user-button" mat-mini-fab color="primary" aria-label="edit user" matTooltip="Редактировать пользователя"
+              <button *ngIf="!this.headerService.isAccountant() || this.headerService.isPersonnelOfficer()" class="edit-user-button" mat-mini-fab color="primary" aria-label="edit user" matTooltip="Редактировать пользователя"
                       (click)="this.openUserEditDialog(user, $event)">
                 <mat-icon class="gray-icon">edit</mat-icon>
               </button>

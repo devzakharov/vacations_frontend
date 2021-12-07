@@ -363,7 +363,9 @@ export class VacationsComponent implements OnInit {
   }
 
   moreThanTwoWeeksBeforeVacation(vacation: Vacation) {
-    return moment(vacation.dateFrom).diff(moment(), 'days') + 1 >= 15;
+    //
+    // return moment(vacation.dateFrom).diff(moment(), 'days') + 1 >= 15;
+    return moment(vacation.dateFrom).diff(moment(), 'days') + 1 >= 5;
   }
 
   isTwoWeeksVacation(vacation: Vacation) {

@@ -23,4 +23,8 @@ export class UserService {
   addNewUser(user: HRUser) {
     return this.http.put<HRUser>(globals.server + '/api/v1/users/add', user);
   }
+
+  getUserById(userId: any) {
+    return this.http.get(globals.server + '/api/v1/users/' + userId);
+  }
 }

@@ -5,6 +5,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import * as globals from "../../globals";
 import { Moment } from 'moment';
 import {User} from "../../model/User";
+import {VacationTransfer} from "../../model/VacationTransfer";
 
 
 
@@ -118,5 +119,33 @@ export class VacationService {
 
   setVacationPayCalculated(vacation: any) {
     return this.http.post<Vacation>(globals.server + '/api/v1/vacations/vacation-pay-calculated', vacation);
+  }
+
+  saveTransferredVacations(vacationTransfer : VacationTransfer) {
+    return this.http.put(globals.server + '/api/v1/vacation-transfer', vacationTransfer);
+  }
+
+  getVacationTransferList(id: number) {
+    return this.http.get<VacationTransfer[]>(globals.server + '/api/v1/vacation-transfer/' + id);
+  }
+
+  getVacationById(vacationId: number) {
+    return this.http.get<Vacation>(globals.server + '/api/v1/vacations/' + vacationId);
+  }
+
+  approveTransfer(transfer: any) {
+    return this.http.post<VacationTransfer>(globals.server + '/api/v1/vacation-transfer', transfer);
+  }
+
+  rejectTransfer(transfer: any) {
+
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: transfer
+    };
+
+    return this.http.delete<VacationTransfer>(globals.server + '/api/v1/vacation-transfer', options);
   }
 }

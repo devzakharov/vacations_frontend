@@ -1,38 +1,38 @@
 <h1 mat-dialog-title class="add-leave-dialog-title">Редактирование отпуска</h1>
 <h2>Редактируемый период:</h2>
-<mat-form-field appearance="fill" *ngIf="oldVacation">
-  <mat-label>{{oldVacation.message}}</mat-label>
+<mat-form-field appearance="fill" *ngIf="vacation">
+  <mat-label>{{vacation.message}}</mat-label>
   <mat-date-range-input [rangePicker]="picker">
-    <input matStartDate readonly [(ngModel)]="oldVacation.dateFrom" placeholder="Начало отпуска">
-    <input matEndDate readonly [(ngModel)]="oldVacation.dateTo" placeholder="Конец отпуска">
+    <input matStartDate readonly [(ngModel)]="vacation.dateFrom" placeholder="Начало отпуска">
+    <input matEndDate readonly [(ngModel)]="vacation.dateTo" placeholder="Конец отпуска">
   </mat-date-range-input>
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-date-range-picker #picker startView="year" [startAt]="oldVacation.dateFrom" ></mat-date-range-picker>
+  <mat-date-range-picker #picker startView="year" [startAt]="vacation.dateFrom" ></mat-date-range-picker>
 </mat-form-field>
 <h2>Новый период (периоды):</h2>
 <div class="row">
-  <p>Перераспределено календарных дней:</p>
-  <p>Перераспределено рабочих дней:</p>
+  <p>Перераспределено календарных дней: {{ transferredCalendarDays }} из {{ calendarDaysLimit }}</p>
+  <p>Перераспределено рабочих дней: {{ transferredWorkingDays }} из {{ workingDaysLimit }}</p>
 </div>
 <div mat-dialog-content class="add-leave-user-dialog">
-  <ng-container *ngFor="let newVacation of newVacations">
-  <mat-form-field appearance="fill" *ngIf="oldVacation">
+  <ng-container *ngFor="let vacationTransferPeriod of vacationTransferPeriods">
+  <mat-form-field appearance="fill" *ngIf="vacation">
     <mat-label>Выберите даты</mat-label>
     <mat-date-range-input [rangePicker]="picker">
-      <input matStartDate [(ngModel)]="newVacation.dateFrom" placeholder="Начало отпуска">
-      <input matEndDate [(ngModel)]="newVacation.dateTo" placeholder="Конец отпуска">
+      <input matStartDate [(ngModel)]="vacationTransferPeriod.dateFrom" placeholder="Начало отпуска">
+      <input matEndDate [(ngModel)]="vacationTransferPeriod.dateTo" placeholder="Конец отпуска" (dateChange)="valueChanged(vacationTransferPeriod.dateFrom, vacationTransferPeriod.dateTo)">
     </mat-date-range-input>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker startView="year" [startAt]="newVacation.dateFrom" ></mat-date-range-picker>
+    <mat-date-range-picker #picker startView="year" [startAt]="vacationTransferPeriod.dateFrom" ></mat-date-range-picker>
   </mat-form-field>
   </ng-container>
   <div class="col-auto" style="margin-bottom: 13px">
-    <button matTooltip="Добавить отпуск" mat-fab color="primary" aria-label="Добавить отпуск" (click)="addNewVacation()">
+    <button matTooltip="Добавить отпуск" mat-fab color="primary" aria-label="Добавить отпуск" (click)="addNewVacationTransferPeriod()">
       <mat-icon>add</mat-icon>
     </button>
   </div>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Отмена</button>
-  <button mat-button (click)="this.saveVacations()" cdkFocusInitial>Сохранить</button>
+  <button mat-button (click)="this.saveVacationTransfer()" cdkFocusInitial>Сохранить</button>
 </div>

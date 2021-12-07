@@ -30,6 +30,8 @@ export class LoginComponent implements OnInit {
     const val = this.form.value;
 
     if (val.username && val.password) {
+      val.username = val.username.trim();
+      val.password = val.password.trim();
       this.authService.login(val.username, val.password)
         .subscribe(
           (response) => {
